@@ -147,13 +147,31 @@ struct UPIQRData {
 
 func parseUPIQR(_ raw: String) -> UPIQRData? {
     guard let components = URLComponents(string: raw) else { return nil }
-    let params = Dictionary(uniqueKeysWithValues:
-        (components.queryItems ?? []).compactMap { i -> (String,String)? in
-            guard let v = i.value else { return nil }
-            return (i.name, v)
-        })
+    
+    // Safely parse query items to avoid duplicate key crash
+    var params = [String: String]()
+    for item in components.queryItems ?? [] {
+        if let val = item.value { params[item.name] = val }
+    }
+    
     guard let pa = params["pa"], !pa.isEmpty else { return nil }
-    return UPIQRData(upiId: pa, name: params["pn"] ?? "", amount: params["am"].flatMap(Double.init))
+    var payeeName = params["pn"] ?? ""
+    
+    // Prevent generic names from overwriting actual store names
+    let lowerName = payeeName.lowercased().trimmingCharacters(in: .whitespaces)
+    let genericNames = ["phonepe merchant", "bharatpe merchant", "gpay merchant", "google pay merchant", "paytm merchant", "amazon pay merchant", "merchant", "bhim merchant"]
+    
+    if genericNames.contains(lowerName) || payeeName.isEmpty {
+        // Fallback to capitalizing the UPI ID username
+        // e.g. "sharma.sweets@ybl" -> "Sharma Sweets"
+        let username = pa.components(separatedBy: "@").first ?? pa
+        payeeName = username
+            .replacingOccurrences(of: ".", with: " ")
+            .replacingOccurrences(of: "_", with: " ")
+            .capitalized
+    }
+    
+    return UPIQRData(upiId: pa, name: payeeName, amount: params["am"].flatMap(Double.init))
 }
 
 // MARK: - Analytics Data Structs
