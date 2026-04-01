@@ -1,0 +1,38 @@
+name: MoneyManager
+options:
+  bundleIdPrefix: com.karankumar
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: false
+
+targets:
+  MoneyManager:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: Sources
+        excludes:
+          - "*.yml"
+          - "*.md"
+      - path: Sources/Assets.xcassets
+    settings:
+      base:
+        PRODUCT_NAME: MoneyManager
+        PRODUCT_BUNDLE_IDENTIFIER: com.karankumar.moneymanagerjlyqdx
+        SWIFT_VERSION: "5.9"
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        # Let Xcode auto-generate the Info.plist (no CFBundleExecutable issue)
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: MoneyManager
+        INFOPLIST_KEY_NSCameraUsageDescription: "Scan UPI QR codes to auto-fill recipient details"
+        INFOPLIST_KEY_UILaunchStoryboardName: ""
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_~iphone: UIInterfaceOrientationPortrait
+        INFOPLIST_PREPROCESS: YES
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: "1.0"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_PREVIEWS: YES
