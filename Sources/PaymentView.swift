@@ -683,6 +683,8 @@ struct CustomSplitSheet: View {
     @State private var hasManuallyEdited: Set<String> = []
     
     @State private var showContactPicker = false
+    
+    @FocusState private var focusedAmountPhone: String?
 
     private var friendsWithPhones: [(name: String, phone: String)] {
         store.savedContacts.compactMap { name, phone in
@@ -806,6 +808,7 @@ struct CustomSplitSheet: View {
                                                         }
                                                     ))
                                                     .keyboardType(.decimalPad)
+                                                    .focused($focusedAmountPhone, equals: friend.phone)
                                                     .font(.system(size: 16, weight: .bold))
                                                     .foregroundColor(.white)
                                                     .multilineTextAlignment(.trailing)
@@ -866,6 +869,14 @@ struct CustomSplitSheet: View {
                     Button(action: distributeEqually) {
                         Text("Equal Split").font(.system(size: 13, weight: .semibold))
                     }.foregroundColor(.accent1)
+                }
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") {
+                        focusedAmountPhone = nil
+                    }
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.accent1)
                 }
             }
             .onAppear {
