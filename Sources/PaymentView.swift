@@ -371,40 +371,48 @@ struct PaymentView: View {
 
                                 Divider().background(Color.white.opacity(0.06)).padding(.leading, 54)
 
-                                // Split Toggle
+                                // Split Row — tap to open split sheet
                                 HStack(spacing: 14) {
-                                    Image(systemName: "person.2.fill").foregroundColor(.catBlue).frame(width: 24)
+                                    Image(systemName: finalSplitFriends.isEmpty ? "person.2" : "person.2.fill")
+                                        .foregroundColor(.catBlue).frame(width: 24)
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text("Split with Friends").font(.system(size: 15, weight: .medium)).foregroundColor(.white)
-                                        if isSplitEnabled && finalSplitFriends.isEmpty { Text("Tap to setup").font(.system(size: 12)).foregroundColor(.catBlue) }
-                                        else if isSplitEnabled { Text("Splitting with \(finalSplitFriends.count)").font(.system(size: 12)).foregroundColor(.catBlue) }
+                                        Text("Split Bill").font(.system(size: 15, weight: .medium)).foregroundColor(.white)
+                                        if !finalSplitFriends.isEmpty {
+                                            Text("Splitting with \(finalSplitFriends.count) \(finalSplitFriends.count == 1 ? "person" : "people")")
+                                                .font(.system(size: 12)).foregroundColor(.catBlue)
+                                        }
                                     }
                                     Spacer()
-                                    Toggle("", isOn: $isSplitEnabled).toggleStyle(SwitchToggleStyle(tint: .catBlue)).labelsHidden()
-                                        .onChange(of: isSplitEnabled) { val in
-                                            if val { showSplitSheet = true }
-                                            else {
-                                                isSplitEnabled = false
-                                                finalSplitFriends = []
-                                            }
+                                    if !finalSplitFriends.isEmpty {
+                                        Button {
+                                            isSplitEnabled = false
+                                            finalSplitFriends = []
+                                            splitGroupName = ""
+                                        } label: {
+                                            Image(systemName: "xmark.circle.fill")
+                                                .foregroundColor(.textSecondary).font(.system(size: 18))
                                         }
+                                    } else {
+                                        Image(systemName: "chevron.right")
+                                            .font(.system(size: 12, weight: .medium)).foregroundColor(.textTertiary)
+                                    }
                                 }
                                 .padding(.horizontal, 16).padding(.vertical, 14)
-                                .onTapGesture { if isSplitEnabled { showSplitSheet = true } }
+                                .contentShape(Rectangle())
+                                .onTapGesture { showSplitSheet = true }
 
-                                if !isSplitEnabled {
-                                    Divider().background(Color.white.opacity(0.06)).padding(.leading, 54)
-                                    // Lend Toggle
-                                    HStack(spacing: 14) {
-                                        Image(systemName: "arrow.up.circle.fill").foregroundColor(.incomeGreen).frame(width: 24)
-                                        VStack(alignment: .leading, spacing: 2) {
-                                            Text("Record as Lend").font(.system(size: 15, weight: .medium)).foregroundColor(.white)
-                                        }
-                                        Spacer()
-                                        Toggle("", isOn: $recordAsLend).toggleStyle(SwitchToggleStyle(tint: .incomeGreen)).labelsHidden()
+                                Divider().background(Color.white.opacity(0.06)).padding(.leading, 54)
+
+                                // Lend Toggle (always visible)
+                                HStack(spacing: 14) {
+                                    Image(systemName: "arrow.up.circle.fill").foregroundColor(.incomeGreen).frame(width: 24)
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("Record as Lend").font(.system(size: 15, weight: .medium)).foregroundColor(.white)
                                     }
-                                    .padding(.horizontal, 16).padding(.vertical, 14)
+                                    Spacer()
+                                    Toggle("", isOn: $recordAsLend).toggleStyle(SwitchToggleStyle(tint: .incomeGreen)).labelsHidden()
                                 }
+                                .padding(.horizontal, 16).padding(.vertical, 14)
                             }
                             .glassCard(radius: 24)
                             .padding(.horizontal, 20).padding(.bottom, 24)

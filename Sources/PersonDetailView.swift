@@ -687,8 +687,24 @@ struct LBEntryCard: View {
                         } else {
                             Image(systemName: "circle").foregroundColor(.textTertiary)
                         }
-                        Text(entry.note.isEmpty ? "No note" : entry.note)
+                        Text(entry.note
+                            .replacingOccurrences(of: #"\s*\[sl:[^\]]+\]"#, with: "", options: .regularExpression)
+                            .trimmingCharacters(in: .whitespaces)
+                             .isEmpty
+                             ? "No note"
+                             : entry.note
+                                .replacingOccurrences(of: #"\s*\[sl:[^\]]+\]"#, with: "", options: .regularExpression)
+                                .trimmingCharacters(in: .whitespaces))
                             .font(.system(size: 14, weight: .medium)).foregroundColor(.white)
+                            .lineLimit(1)
+                        // Split badge
+                        if entry.note.contains("sl:") {
+                            Text("Split")
+                                .font(.system(size: 9, weight: .bold))
+                                .foregroundColor(.catBlue)
+                                .padding(.horizontal, 6).padding(.vertical, 2)
+                                .background(Capsule().fill(Color.catBlue.opacity(0.18)))
+                        }
                     }
                     Text(entry.date, style: .date)
                         .font(.system(size: 11)).foregroundColor(.textSecondary)
