@@ -597,6 +597,17 @@ struct PaymentView: View {
             if !recipientName.trimmingCharacters(in: .whitespaces).isEmpty {
                 store.addPaymentContact(name: recipientName, phone: upiId.isEmpty ? nil : upiId)
             }
+            // Notify the recipient's app so their card shows our payment in their Transfers
+            // Look up their phone from saved contacts (UPI contacts may be phone numbers)
+            let recipientPhone = store.savedContacts[recipientName] ?? (upiId.isEmpty ? nil : upiId)
+            if let rPhone = recipientPhone, !rPhone.isEmpty {
+                store.recordOutgoingPaymentForRecipient(
+                    toName: recipientName,
+                    toPhone: rPhone,
+                    amount: amount,
+                    note: note.isEmpty ? targetCat.name : note
+                )
+            }
         }
         store.saveUPI(name: recipientName, upi: upiId)
 

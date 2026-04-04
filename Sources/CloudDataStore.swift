@@ -31,10 +31,11 @@ class CloudDataStore: ObservableObject {
     private let storage = Storage.storage()
     private var uid     : String { Auth.auth().currentUser?.uid ?? "" }
 
-    private var txListener     : ListenerRegistration? = nil
-    private var lbListener     : ListenerRegistration? = nil
-    private var catListener    : ListenerRegistration? = nil
-    private var ledgerListener : ListenerRegistration? = nil
+    private var txListener             : ListenerRegistration? = nil
+    private var lbListener             : ListenerRegistration? = nil
+    private var catListener            : ListenerRegistration? = nil
+    private var ledgerListener         : ListenerRegistration? = nil
+    private var incomingPayListener    : ListenerRegistration? = nil
 
     // ── Init ─────────────────────────────────────────────────────────
     init() {
@@ -56,14 +57,16 @@ class CloudDataStore: ObservableObject {
         listenLendBorrows()
         listenCategories()
         listenSharedLedgers()
+        listenIncomingPayments()
         isLoading = false
     }
 
     func stopListening() {
-        txListener?.remove();     txListener     = nil
-        lbListener?.remove();     lbListener     = nil
-        catListener?.remove();    catListener    = nil
-        ledgerListener?.remove(); ledgerListener = nil
+        txListener?.remove();          txListener          = nil
+        lbListener?.remove();          lbListener          = nil
+        catListener?.remove();         catListener         = nil
+        ledgerListener?.remove();      ledgerListener      = nil
+        incomingPayListener?.remove(); incomingPayListener = nil
     }
 
     // ── Helpers ───────────────────────────────────────────────────────
@@ -83,6 +86,8 @@ class CloudDataStore: ObservableObject {
             if let p = UserProfile.from(data, uid: self.uid) {
                 self.userProfile = p
                 self.userName    = p.displayName
+                // Start incoming payments listener now that we have a phone number
+                self.listenIncomingPayments()
             }
         }
     }
@@ -243,6 +248,79 @@ class CloudDataStore: ObservableObject {
         for l in new { dict[l.id] = l }
         sharedLedgers = Array(dict.values).sorted { $0.date > $1.date }
     }
+
+    // ── MARK: Incoming Payments ──────────────────────────────────────
+    // Listens to payments sent TO me by other app users.
+    // When Rahul pays me from his app, he writes to 'incoming_payments'.
+    // My app picks it up and creates his contact card + a received Transaction.
+    private func listenIncomingPayments() {
+        let myPhone = userProfile?.phone ?? ""
+        guard !myPhone.isEmpty else { return }
+        incomingPayListener = db.collection("incoming_payments")
+            .whereField("toPhone", isEqualTo: myPhone)
+            .addSnapshotListener { [weak self] snap, _ in
+                guard let self, let docs = snap?.documents else { return }
+                let incoming = docs.compactMap { doc -> [String: Any]? in doc.data() }
+                self.syncIncomingPaymentsAsReceived(incoming)
+            }
+    }
+
+    // Idempotent: checks transactions for a matching incomingPayId before creating
+    private func syncIncomingPaymentsAsReceived(_ payments: [[String: Any]]) {
+        let defaultCat = categories.first ?? AppCategory.defaultCategories[0]
+        for pay in payments {
+            guard let payId    = pay["id"]         as? String,
+                  let fromName = pay["fromName"]    as? String,
+                  let fromPhone = pay["fromPhone"]  as? String,
+                  let amount   = pay["amount"]      as? Double,
+                  let ts       = pay["date"]        as? Timestamp else { continue }
+
+            // Skip if already synced — check by matching incomingPayId in note tag
+            let marker = "ip:\(payId)"
+            let alreadySynced = transactions.contains { $0.note.contains(marker) }
+            if alreadySynced { continue }
+
+            let note = (pay["note"] as? String ?? "").isEmpty ? "Payment received" : (pay["note"] as? String ?? "Payment received")
+
+            // Auto-create sender's contact card
+            addPaymentContact(name: fromName, phone: fromPhone)
+
+            // Log a received transaction tagged with the incoming pay ID
+            let tx = Transaction(
+                amount: amount,
+                recipientName: fromName,
+                upiId: fromPhone,
+                note: "\(note) [\(marker)]",
+                categoryId: defaultCat.id,
+                categoryName: "Received",
+                categoryEmoji: "📥",
+                categoryHex: defaultCat.colorHex,
+                date: ts.dateValue()
+            )
+            addTransaction(tx)
+        }
+    }
+
+    // Called by the sender's app when making a direct payment to a known phone number
+    func recordOutgoingPaymentForRecipient(toName: String, toPhone: String, amount: Double, note: String) {
+        guard !toPhone.isEmpty else { return }
+        let myPhone = userProfile?.phone ?? ""
+        let myName  = userName
+        guard !myPhone.isEmpty else { return }
+        let payId = UUID().uuidString
+        let dict: [String: Any] = [
+            "id":        payId,
+            "fromName":  myName,
+            "fromPhone": myPhone,
+            "toName":    toName,
+            "toPhone":   toPhone,
+            "amount":    amount,
+            "note":      note,
+            "date":      Timestamp(date: Date())
+        ]
+        db.collection("incoming_payments").document(payId).setData(dict)
+    }
+
 
     // ── MARK: Stats ──────────────────────────────────────────────────
     var todayTotal: Double {
