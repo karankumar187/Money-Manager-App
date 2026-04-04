@@ -42,6 +42,9 @@ class CloudDataStore: ObservableObject {
            let v = try? JSONDecoder().decode([String: Data].self, from: d) {
             self.savedAvatars = v
         }
+        if let d = UserDefaults.standard.data(forKey: "mm_profile_image") {
+            self.userProfileImageData = d
+        }
     }
 
     // Called once auth is confirmed & migration is done
