@@ -33,17 +33,7 @@ struct PersonDetailView: View {
         store.transactions.filter { $0.recipientName == personName }.sorted { $0.date > $1.date }
     }
 
-    // Split ledger entries involving this person (by phone number)
-    var splits: [SharedLedger] {
-        guard let contactPhone = phone else { return [] }
-        let myPhone = store.userProfile?.phone ?? ""
-        return store.sharedLedgers.filter { ledger in
-            (ledger.toPhone == contactPhone && ledger.fromPhone == myPhone) ||
-            (ledger.fromPhone == contactPhone && ledger.toPhone == myPhone)
-        }.sorted { $0.date > $1.date }
-    }
-
-    @State private var selectedTab = 0 // 0 = Lends, 1 = Splits, 2 = Transfers
+    @State private var selectedTab = 0 // 0 = Lends, 1 = Transfers
 
     // Avatar color from name hash
     var avatarColor: Color {
@@ -138,17 +128,16 @@ struct PersonDetailView: View {
                         }
                         .padding(.horizontal, 20).padding(.bottom, 28)
 
-                        // ── Tabs (Lends | Splits | Transfers) ─────────────────
+                        // ── Tabs (Lends | Transfers) ──────────────────────────
                         Picker("", selection: $selectedTab) {
                             Text("Lends").tag(0)
-                            Text("Splits").tag(1)
-                            Text("Transfers").tag(2)
+                            Text("Transfers").tag(1)
                         }
                         .pickerStyle(.segmented)
                         .padding(.horizontal, 20).padding(.bottom, 24)
 
                         if selectedTab == 0 {
-                            // ── Lent Section ─────────────────────────────
+                            // ── Lends Section ──────────────────────────────
                             if lentEntries.isEmpty && borrowedEntries.isEmpty {
                                 Text("No lend records for this person.")
                                     .font(.system(size: 14)).foregroundColor(.textSecondary)
@@ -178,32 +167,6 @@ struct PersonDetailView: View {
                                     )
                                     .padding(.bottom, 20)
                                 }
-                            }
-                        } else if selectedTab == 1 {
-                            // ── Splits Section ────────────────────────────
-                            if splits.isEmpty {
-                                VStack(spacing: 12) {
-                                    Image(systemName: "person.2.slash")
-                                        .font(.system(size: 36)).foregroundColor(.textSecondary.opacity(0.4))
-                                    Text("No split expenses with this person yet.")
-                                        .font(.system(size: 14)).foregroundColor(.textSecondary)
-                                        .multilineTextAlignment(.center)
-                                }
-                                .frame(maxWidth: .infinity).padding(40)
-                            } else {
-                                VStack(spacing: 12) {
-                                    ForEach(splits) { ledger in
-                                        let iOwePaid = ledger.fromPhone == (store.userProfile?.phone ?? "")
-                                        SplitLedgerRow(
-                                            ledger: ledger,
-                                            iAmSender: iOwePaid,
-                                            currencySymbol: store.currencySymbol,
-                                            onSettle: { store.markSharedLedgerPaid(ledger) }
-                                        )
-                                        .padding(.horizontal, 20)
-                                    }
-                                }
-                                .padding(.bottom, 20)
                             }
                         } else {
                             // ── Transfers Section ──────────────────────────
