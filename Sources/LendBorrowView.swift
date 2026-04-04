@@ -301,9 +301,15 @@ struct PersonCard: View {
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(group.name).font(.system(size: 15, weight: .semibold)).foregroundColor(.white)
+                    Text(group.name)
+                        .font(.system(size: 15, weight: .semibold)).foregroundColor(.white)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
                     if let phone = group.phone {
-                        Text(phone).font(.system(size: 12)).foregroundColor(.textSecondary)
+                        Text(phone)
+                            .font(.system(size: 12)).foregroundColor(.textSecondary)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
                     }
                     // Pills
                     HStack(spacing: 6) {
