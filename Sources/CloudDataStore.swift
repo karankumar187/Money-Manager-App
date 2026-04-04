@@ -76,6 +76,17 @@ class CloudDataStore: ObservableObject {
         db.collection("users").document(uid)
     }
 
+    // Looks up another user's profile by phone number (e.g. to auto-fill their UPI ID)
+    func fetchContactProfile(byPhone phone: String) async -> UserProfile? {
+        guard !phone.isEmpty else { return nil }
+        let snap = try? await db.collection("users")
+            .whereField("phone", isEqualTo: phone)
+            .limit(to: 1)
+            .getDocuments()
+        guard let doc = snap?.documents.first else { return nil }
+        return UserProfile.from(doc.data(), uid: doc.documentID)
+    }
+
     // ── Profile ───────────────────────────────────────────────────────
     func loadProfile() {
         userRef().getDocument { [weak self] snap, _ in

@@ -16,6 +16,7 @@ struct PersonDetailView: View {
     @State private var deleteTarget      : LendBorrow? = nil
     @State private var showSendMoney     = false
     @State private var showClipboardHint = false
+    @State private var contactProfile    : UserProfile? = nil   // fetched from Firestore if they have an account
 
     // All entries for this person
     var entries: [LendBorrow] {
@@ -51,14 +52,24 @@ struct PersonDetailView: View {
                         // ── Person Header Card ──────────────────────
                         VStack(spacing: 16) {
                             HStack(spacing: 16) {
-                                // Avatar
+                                // Avatar — prefer account profile pic, then local avatar, then initials
                                 ZStack {
-                                    if let data = store.savedAvatars[personName], let uiImage = UIImage(data: data) {
+                                    if let urlStr = contactProfile?.profileImageURL,
+                                       let url = URL(string: urlStr) {
+                                        AsyncImage(url: url) { phase in
+                                            if let img = phase.image {
+                                                img.resizable().scaledToFill()
+                                                    .frame(width: 64, height: 64).clipShape(Circle())
+                                            } else {
+                                                Circle().fill(avatarColor.opacity(0.18)).frame(width: 64, height: 64)
+                                                Text(String(personName.prefix(1)).uppercased())
+                                                    .font(.system(size: 26, weight: .bold)).foregroundColor(avatarColor)
+                                            }
+                                        }
+                                    } else if let data = store.savedAvatars[personName], let uiImage = UIImage(data: data) {
                                         Image(uiImage: uiImage)
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 64, height: 64)
-                                            .clipShape(Circle())
+                                            .resizable().scaledToFill()
+                                            .frame(width: 64, height: 64).clipShape(Circle())
                                     } else {
                                         Circle().fill(avatarColor.opacity(0.18)).frame(width: 64, height: 64)
                                         Text(String(personName.prefix(1)).uppercased())
@@ -212,7 +223,8 @@ struct PersonDetailView: View {
             SendMoneySheet(
                 personName: personName,
                 phone: phone,
-                prefilledAmount: netBalance < 0 ? abs(netBalance) : 0
+                prefilledAmount: netBalance < 0 ? abs(netBalance) : 0,
+                prefilledUPI: contactProfile?.upiId   // auto-fill from their account
             ) {
                 withAnimation { showClipboardHint = true }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
@@ -268,6 +280,12 @@ struct PersonDetailView: View {
             }
         }
         .animation(.spring(response: 0.35), value: showClipboardHint)
+        .task {
+            // Fetch contact's account profile (for UPI auto-fill + profile pic)
+            if let p = phone {
+                contactProfile = await store.fetchContactProfile(byPhone: p)
+            }
+        }
     }
 }
 
@@ -277,28 +295,35 @@ struct SendMoneySheet: View {
     let personName      : String
     let phone           : String?
     let prefilledAmount : Double
-    let onPaid          : () -> Void  // called after payment to trigger clipboard hint
+    var  prefilledUPI   : String? = nil   // auto-filled from contact's MoneyManager account
+    let onPaid          : () -> Void
 
     @EnvironmentObject var store: CloudDataStore
     @Environment(\.dismiss) var dismiss
 
-    @State private var amountStr     = ""
-    @State private var note          = ""
-    @State private var selectedCat   : AppCategory? = nil
-    @State private var addAsLend     = false
-    @State private var selectedApp   : UPIApp = .gpay
-    @State private var showScanner   = false
-    @State private var upiId         : String = ""
+    @State private var amountStr  = ""
+    @State private var note       = ""
+    @State private var selectedCat: AppCategory? = nil
+    @State private var addAsLend  = false
+    @State private var selectedApp: UPIApp = .gpay
+    @State private var showScanner = false
+    @State private var upiId      : String = ""
     @FocusState private var amountFocused: Bool
 
     var amount: Double   { Double(amountStr) ?? 0 }
     var canProceed: Bool { amount > 0 }
+
+    // UPI priority: user-typed > saved locally > from their account
     var savedUPI: String? { store.savedUPIs[personName] }
-    var effectiveUPI: String { upiId.isEmpty ? (savedUPI ?? "") : upiId }
+    var effectiveUPI: String {
+        if !upiId.isEmpty { return upiId }
+        if let s = savedUPI, !s.isEmpty { return s }
+        return prefilledUPI ?? ""
+    }
     var hasUPI: Bool { !effectiveUPI.isEmpty }
+    var upiFromAccount: Bool { effectiveUPI == prefilledUPI && !(prefilledUPI ?? "").isEmpty && upiId.isEmpty && savedUPI == nil }
     var firstName: String { personName.components(separatedBy: " ").first ?? personName }
 
-    // Avatar palette
     var avatarColor: Color {
         let p: [Color] = [.catPurple, .accentBlue, .catOrange, .incomeGreen, .catPink, .catYellow]
         return p[abs(personName.hashValue) % p.count]
@@ -308,11 +333,10 @@ struct SendMoneySheet: View {
         NavigationView {
             ZStack {
                 Color.bgPrimary.ignoresSafeArea()
-
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 18) {
 
-                        // ── Person header ──────────────────────────
+                        // ── Person header ────────────────────────────
                         HStack(spacing: 14) {
                             ZStack {
                                 if let data = store.savedAvatars[personName], let img = UIImage(data: data) {
@@ -326,36 +350,37 @@ struct SendMoneySheet: View {
                             }
                             VStack(alignment: .leading, spacing: 3) {
                                 Text(personName).font(.system(size: 17, weight: .bold)).foregroundColor(.white)
-                                if let p = phone {
-                                    Text(p).font(.system(size: 12)).foregroundColor(.textSecondary)
-                                }
+                                if let p = phone { Text(p).font(.system(size: 12)).foregroundColor(.textSecondary) }
                                 if hasUPI {
-                                    Text(effectiveUPI).font(.system(size: 11)).foregroundColor(.accent1)
-                                        .lineLimit(1).truncationMode(.middle)
+                                    HStack(spacing: 6) {
+                                        Text(effectiveUPI).font(.system(size: 11)).foregroundColor(.accent1)
+                                            .lineLimit(1).truncationMode(.middle)
+                                        if upiFromAccount {
+                                            Text("✓ Verified")
+                                                .font(.system(size: 9, weight: .bold))
+                                                .foregroundColor(.incomeGreen)
+                                                .padding(.horizontal, 6).padding(.vertical, 2)
+                                                .background(Capsule().fill(Color.incomeGreen.opacity(0.15)))
+                                        }
+                                    }
                                 }
                             }
                             Spacer()
                         }
                         .padding(16).glassCard(radius: 18)
 
-                        // ── Amount ─────────────────────────────
+                        // ── Amount ────────────────────────────────────
                         VStack(alignment: .leading, spacing: 8) {
                             Text("AMOUNT").font(.system(size: 10, weight: .bold)).foregroundColor(.textSecondary).tracking(1.5)
                             HStack(alignment: .firstTextBaseline, spacing: 4) {
-                                Text(store.currencySymbol)
-                                    .font(.system(size: 26, weight: .bold)).foregroundColor(.accent1)
+                                Text(store.currencySymbol).font(.system(size: 26, weight: .bold)).foregroundColor(.accent1)
                                 TextField("0", text: $amountStr)
-                                    .focused($amountFocused)
-                                    .keyboardType(.decimalPad)
-                                    .font(.system(size: 38, weight: .bold, design: .rounded))
-                                    .foregroundColor(.white)
+                                    .focused($amountFocused).keyboardType(.decimalPad)
+                                    .font(.system(size: 38, weight: .bold, design: .rounded)).foregroundColor(.white)
                             }
                             .padding(16).glassCard()
-                            // Quick fill
                             if prefilledAmount > 0 {
-                                Button {
-                                    amountStr = String(format: "%.0f", prefilledAmount)
-                                } label: {
+                                Button { amountStr = String(format: "%.0f", prefilledAmount) } label: {
                                     Text("Fill \(store.formatted(prefilledAmount)) (outstanding)")
                                         .font(.system(size: 11, weight: .semibold)).foregroundColor(.accent1)
                                         .padding(.horizontal, 12).padding(.vertical, 6)
@@ -364,18 +389,17 @@ struct SendMoneySheet: View {
                             }
                         }
 
-                        // ── Note ──────────────────────────────
+                        // ── Note ──────────────────────────────────────
                         VStack(alignment: .leading, spacing: 8) {
                             Text("NOTE").font(.system(size: 10, weight: .bold)).foregroundColor(.textSecondary).tracking(1.5)
                             HStack {
                                 Image(systemName: "pencil").foregroundColor(.textSecondary).font(.system(size: 14))
-                                TextField("What's this for?", text: $note)
-                                    .font(.system(size: 15)).foregroundColor(.white)
+                                TextField("What's this for?", text: $note).font(.system(size: 15)).foregroundColor(.white)
                             }
                             .padding(14).glassCard()
                         }
 
-                        // ── Category ───────────────────────────
+                        // ── Category ─────────────────────────────────
                         VStack(alignment: .leading, spacing: 10) {
                             Text("CATEGORY").font(.system(size: 10, weight: .bold)).foregroundColor(.textSecondary).tracking(1.5)
                             ScrollView(.horizontal, showsIndicators: false) {
@@ -389,12 +413,8 @@ struct SendMoneySheet: View {
                                             }
                                             .foregroundColor(selectedCat?.id == cat.id ? .white : .textSecondary)
                                             .padding(.horizontal, 12).padding(.vertical, 8)
-                                            .background(Capsule().fill(
-                                                selectedCat?.id == cat.id ? cat.color.opacity(0.7) : Color.bgCard
-                                            ))
-                                            .overlay(Capsule().stroke(
-                                                selectedCat?.id == cat.id ? cat.color.opacity(0.4) : Color.white.opacity(0.06), lineWidth: 1
-                                            ))
+                                            .background(Capsule().fill(selectedCat?.id == cat.id ? cat.color.opacity(0.7) : Color.bgCard))
+                                            .overlay(Capsule().stroke(selectedCat?.id == cat.id ? cat.color.opacity(0.4) : Color.white.opacity(0.06), lineWidth: 1))
                                         }
                                     }
                                 }
@@ -402,31 +422,23 @@ struct SendMoneySheet: View {
                             }
                         }
 
-                        // ── Record as Lend toggle ──────────────────
+                        // ── Record as Lend toggle ─────────────────────
                         HStack(spacing: 14) {
                             ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.incomeGreen.opacity(0.15))
-                                    .frame(width: 40, height: 40)
-                                Image(systemName: "arrow.up.arrow.down.circle.fill")
-                                    .foregroundColor(.incomeGreen).font(.system(size: 20))
+                                RoundedRectangle(cornerRadius: 10).fill(Color.incomeGreen.opacity(0.15)).frame(width: 40, height: 40)
+                                Image(systemName: "arrow.up.arrow.down.circle.fill").foregroundColor(.incomeGreen).font(.system(size: 20))
                             }
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Record as Lend")
-                                    .font(.system(size: 14, weight: .semibold)).foregroundColor(.white)
-                                Text(addAsLend ? "Saved to your Lends list" : "Only saved in History")
-                                    .font(.system(size: 11)).foregroundColor(.textSecondary)
+                                Text("Record as Lend").font(.system(size: 14, weight: .semibold)).foregroundColor(.white)
+                                Text(addAsLend ? "Saved to your Lends list" : "Only saved in History").font(.system(size: 11)).foregroundColor(.textSecondary)
                             }
                             Spacer()
-                            Toggle("", isOn: $addAsLend)
-                                .toggleStyle(SwitchToggleStyle(tint: .incomeGreen))
-                                .labelsHidden()
+                            Toggle("", isOn: $addAsLend).toggleStyle(SwitchToggleStyle(tint: .incomeGreen)).labelsHidden()
                         }
                         .padding(14).glassCard(radius: 16)
 
-                        // ── UPI Section ───────────────────────────
+                        // ── UPI Section ───────────────────────────────
                         if hasUPI {
-                            // App picker row
                             VStack(alignment: .leading, spacing: 10) {
                                 Text("PAY VIA").font(.system(size: 10, weight: .bold)).foregroundColor(.textSecondary).tracking(1.5)
                                 ScrollView(.horizontal, showsIndicators: false) {
@@ -436,32 +448,25 @@ struct SendMoneySheet: View {
                                                 VStack(spacing: 6) {
                                                     if app.logoName.isEmpty {
                                                         Image(systemName: "indianrupeesign.circle")
-                                                            .resizable().scaledToFit().frame(width: 36, height: 36)
-                                                            .foregroundColor(app.color)
+                                                            .resizable().scaledToFit().frame(width: 36, height: 36).foregroundColor(app.color)
                                                     } else {
                                                         Image(app.logoName).resizable().scaledToFit()
-                                                            .frame(width: 36, height: 36)
-                                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                                            .frame(width: 36, height: 36).clipShape(RoundedRectangle(cornerRadius: 8))
                                                     }
                                                     Text(app.rawValue.components(separatedBy: ":").first ?? app.rawValue)
                                                         .font(.system(size: 10, weight: .semibold))
                                                         .foregroundColor(selectedApp == app ? app.color : .textSecondary)
                                                 }
                                                 .padding(10)
-                                                .background(RoundedRectangle(cornerRadius: 14).fill(
-                                                    selectedApp == app ? app.color.opacity(0.15) : Color.bgCard
-                                                ))
-                                                .overlay(RoundedRectangle(cornerRadius: 14).stroke(
-                                                    selectedApp == app ? app.color.opacity(0.4) : Color.white.opacity(0.05), lineWidth: 1
-                                                ))
+                                                .background(RoundedRectangle(cornerRadius: 14).fill(selectedApp == app ? app.color.opacity(0.15) : Color.bgCard))
+                                                .overlay(RoundedRectangle(cornerRadius: 14).stroke(selectedApp == app ? app.color.opacity(0.4) : Color.white.opacity(0.05), lineWidth: 1))
                                             }
                                         }
-                                    }
-                                    .padding(.horizontal, 2)
+                                    }.padding(.horizontal, 2)
                                 }
                             }
                         } else {
-                            // No UPI saved — offer scan or type
+                            // No UPI yet — scan or skip
                             VStack(spacing: 10) {
                                 Text("UPI ID REQUIRED TO PAY")
                                     .font(.system(size: 10, weight: .bold)).foregroundColor(.textSecondary).tracking(1.5)
@@ -472,35 +477,29 @@ struct SendMoneySheet: View {
                                             Image(systemName: "qrcode.viewfinder").font(.system(size: 16))
                                             Text("Scan QR").font(.system(size: 13, weight: .semibold))
                                         }
-                                        .foregroundColor(.white)
-                                        .frame(maxWidth: .infinity).frame(height: 44)
+                                        .foregroundColor(.white).frame(maxWidth: .infinity).frame(height: 44)
                                         .background(RoundedRectangle(cornerRadius: 12).fill(Color.accent1.opacity(0.8)))
                                     }
-                                    Button {
-                                        // Type UPI — reuse ManualUPIEntryView result
-                                        showScanner = true   // scanner has "Type" option built in
-                                    } label: {
+                                    Button { showScanner = true } label: {
                                         HStack(spacing: 8) {
                                             Image(systemName: "keyboard").font(.system(size: 16))
                                             Text("Skip Pay").font(.system(size: 13, weight: .semibold))
                                         }
-                                        .foregroundColor(.textSecondary)
-                                        .frame(maxWidth: .infinity).frame(height: 44)
+                                        .foregroundColor(.textSecondary).frame(maxWidth: .infinity).frame(height: 44)
                                         .background(RoundedRectangle(cornerRadius: 12).fill(Color.bgCard))
                                     }
                                 }
                             }
                         }
 
-                        // ── Pay Button ────────────────────────────
+                        // ── Pay Button ────────────────────────────────
                         Button { handlePay() } label: {
                             HStack(spacing: 10) {
                                 Image(systemName: hasUPI ? "paperplane.fill" : "square.and.pencil")
                                 Text(hasUPI ? "Open \(selectedApp.rawValue.components(separatedBy: ":").first ?? selectedApp.rawValue)" : "Log Payment Only")
                                     .font(.system(size: 17, weight: .bold))
                             }
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity).frame(height: 56)
+                            .foregroundColor(.white).frame(maxWidth: .infinity).frame(height: 56)
                             .background(canProceed ? LinearGradient.accentGradient : LinearGradient(colors: [.bgCard], startPoint: .leading, endPoint: .trailing))
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .shadow(color: Color.accent1.opacity(canProceed ? 0.35 : 0), radius: 12, y: 4)
@@ -521,20 +520,21 @@ struct SendMoneySheet: View {
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button("Done") {
-                        // Dismiss ANY active keyboard (amount OR note field)
-                        UIApplication.shared.sendAction(
-                            #selector(UIResponder.resignFirstResponder),
-                            to: nil, from: nil, for: nil
-                        )
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     }.foregroundColor(.accent1)
                 }
             }
             .onAppear {
-                // Pre-select first category
                 if selectedCat == nil { selectedCat = store.categories.first }
                 amountFocused = true
+                // Pre-fill amount if settling a balance
+                if prefilledAmount > 0 && amountStr.isEmpty {
+                    amountStr = String(format: "%.0f", prefilledAmount)
+                }
+                // prefilledUPI from account is used via effectiveUPI computed var — no state needed
             }
         }
+
         .sheet(isPresented: $showScanner) {
             QRScannerView { qrData in
                 upiId = qrData.upiId
