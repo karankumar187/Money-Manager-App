@@ -103,8 +103,13 @@ class CloudDataStore: ObservableObject {
 
     private func uploadProfileImage(_ data: Data) async -> String? {
         let ref = storage.reference().child("profiles/\(uid)/avatar.jpg")
-        guard let _ = try? await ref.putDataAsync(data) else { return nil }
-        return try? await ref.downloadURL().absoluteString
+        do {
+            _ = try await ref.putDataAsync(data)
+            let url = try await ref.downloadURL()
+            return url.absoluteString
+        } catch {
+            return nil
+        }
     }
 
     func saveSetting(budget: Double? = nil, currency: String? = nil, name: String? = nil) {
