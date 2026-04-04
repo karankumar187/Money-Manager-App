@@ -403,7 +403,13 @@ class CloudDataStore: ObservableObject {
         for lb in lendBorrows {
             batch.deleteDocument(userRef().collection("lendborrows").document(lb.id.uuidString))
         }
-        batch.commit()
+        Task {
+            do {
+                try await batch.commit()
+            } catch {
+                print("Failed to clear data: \(error)")
+            }
+        }
         transactions = []
         lendBorrows  = []
         categories   = AppCategory.defaultCategories
