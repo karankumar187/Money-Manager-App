@@ -449,7 +449,7 @@ struct LBAddSheet: View {
                                 dueDate: hasDueDate ? dueDate : nil
                             )
                             if let pd = prefilledImageData {
-                                store.savedAvatars[lb.personName] = pd
+                                store.saveAvatar(name: lb.personName, data: pd)
                             }
                             store.addLendBorrow(lb)
                             dismiss()

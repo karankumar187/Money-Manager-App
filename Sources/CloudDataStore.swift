@@ -17,6 +17,7 @@ class CloudDataStore: ObservableObject {
     @Published var categories     : [AppCategory]   = AppCategory.defaultCategories
     @Published var sharedLedgers  : [SharedLedger]  = []
     @Published var savedContacts  : [String: String?] = [:]
+    @Published var savedAvatars   : [String: Data]    = [:]
     @Published var savedUPIs      : [String: String]  = [:]
     @Published var userProfile    : UserProfile?    = nil
     @Published var monthlyBudget  : Double          = 30000
@@ -36,7 +37,12 @@ class CloudDataStore: ObservableObject {
     private var ledgerListener : ListenerRegistration? = nil
 
     // ── Init ─────────────────────────────────────────────────────────
-    init() {}
+    init() {
+        if let d = UserDefaults.standard.data(forKey: "savedAvatars_v4"),
+           let v = try? JSONDecoder().decode([String: Data].self, from: d) {
+            self.savedAvatars = v
+        }
+    }
 
     // Called once auth is confirmed & migration is done
     func startListening() {
@@ -171,6 +177,21 @@ class CloudDataStore: ObservableObject {
         let start = Calendar.current.date(from: Calendar.current.dateComponents([.year,.month], from: Date()))!
         return transactions.filter { $0.date >= start }.reduce(0) { $0 + $1.amount }
     }
+    var thisWeekTotal: Double {
+        let cal = Calendar.current
+        let start = cal.date(from: cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
+        return transactions.filter { $0.date >= start }.reduce(0) { $0 + $1.amount }
+    }
+    var averageDailySpend: Double {
+        let cal = Calendar.current
+        let start = cal.date(from: cal.dateComponents([.year,.month], from: Date()))!
+        let days = max(1, cal.dateComponents([.day], from: start, to: Date()).day ?? 1)
+        return thisMonthTotal / Double(days)
+    }
+    // Short aliases matching old DataStore API
+    var totalLent: Double { totalLentOutstanding }
+    var totalBorrowed: Double { totalBorrowedOutstanding }
+
     var totalLentOutstanding: Double {
         lendBorrows.filter { $0.type == .lent && !$0.isPaid }.reduce(0) { $0 + $1.remainingAmount }
     }
@@ -186,6 +207,11 @@ class CloudDataStore: ObservableObject {
 
     func deleteTransaction(_ t: Transaction) {
         userRef().collection("transactions").document(t.id.uuidString).delete()
+    }
+
+    // Overload matching old DataStore API
+    func deleteTransaction(id: UUID) {
+        userRef().collection("transactions").document(id.uuidString).delete()
     }
 
     func saveUPI(name: String, upi: String) {
@@ -214,12 +240,28 @@ class CloudDataStore: ObservableObject {
         updateLendBorrow(updated)
     }
 
+    // Overload matching old DataStore API
+    func markPaid(id: UUID) {
+        guard let lb = lendBorrows.first(where: { $0.id == id }) else { return }
+        markPaid(lb)
+    }
+
+    func deleteLendBorrow(id: UUID) {
+        userRef().collection("lendborrows").document(id.uuidString).delete()
+    }
+
     func addPartialPayment(to lb: LendBorrow, amount: Double) {
         var updated = lb
         updated.paidAmount  = min(lb.amount, lb.paidAmount + amount)
         updated.isPaid      = updated.paidAmount >= lb.amount
         if updated.isPaid { updated.paidDate = Date() }
         updateLendBorrow(updated)
+    }
+
+    // Overload matching the old DataStore API — looks up entry by UUID
+    func addPartialPayment(id: UUID, paidNow: Double) {
+        guard let lb = lendBorrows.first(where: { $0.id == id }) else { return }
+        addPartialPayment(to: lb, amount: paidNow)
     }
 
     // ── MARK: Shared Ledgers (Splitwise) ─────────────────────────────
@@ -296,6 +338,14 @@ class CloudDataStore: ObservableObject {
     func removePaymentContact(name: String) {
         savedContacts.removeValue(forKey: name)
         userRef().setData(["savedContacts": savedContacts.mapValues { $0 ?? "" }], merge: true)
+    }
+
+    // Stores custom contact avatars locally to prevent Firestore 1MB document blooming
+    func saveAvatar(name: String, data: Data) {
+        savedAvatars[name] = data
+        if let dav = try? JSONEncoder().encode(savedAvatars) {
+            UserDefaults.standard.set(dav, forKey: "savedAvatars_v4")
+        }
     }
 
     // ── MARK: Budget ─────────────────────────────────────────────────
