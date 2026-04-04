@@ -137,7 +137,11 @@ class CloudDataStore: ObservableObject {
 
     private func uploadProfileImageAndSave(_ data: Data) async {
         if let url = await uploadProfileImage(data) {
-            userRef().setData(["profileImageURL": url], merge: true)
+            do {
+                try await userRef().setData(["profileImageURL": url], merge: true)
+            } catch {
+                print("Failed to save profile image URL: \(error)")
+            }
         }
     }
 
