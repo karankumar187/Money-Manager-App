@@ -213,12 +213,11 @@ class CloudDataStore: ObservableObject {
     }
 
     // Creates a local LendBorrow(.borrowed) record for each incoming SharedLedger
-    // the first time the recipient opens the app — idempotent via the sharedLedgerId note tag.
+    // the first time the recipient opens the app — idempotent via splitGroupId field.
     private func syncIncomingSplitsAsBorrowed(_ ledgers: [SharedLedger]) {
         for ledger in ledgers where !ledger.isPaid {
-            let marker = "sl:\(ledger.id)"   // unique marker stored in the note field
-            // Skip if we already synced this ledger
-            let alreadySynced = lendBorrows.contains { $0.note.contains(marker) }
+            // Skip if we already synced this ledger (check by splitGroupId == ledger.id)
+            let alreadySynced = lendBorrows.contains { $0.splitGroupId == ledger.id }
             if alreadySynced { continue }
 
             // Auto-save the lender as a contact
@@ -230,8 +229,9 @@ class CloudDataStore: ObservableObject {
                 personName: ledger.fromName,
                 contactPhone: ledger.fromPhone,
                 amount: ledger.amount,
-                note: "\(ledger.note) [\(marker)]",
-                date: ledger.date
+                note: ledger.note,
+                date: ledger.date,
+                splitGroupId: ledger.id
             )
             addLendBorrow(lb)
         }
@@ -403,19 +403,16 @@ class CloudDataStore: ObservableObject {
             // 2. Auto-create saved contact so card appears in the Payments tab
             addPaymentContact(name: friend.name, phone: friend.phone)
 
-            // 3. Personal lend record tagged with splitGroupId via contactPhone field logic
+            // 3. Personal lend record tagged with splitGroupId
             let lb = LendBorrow(
                 id: UUID(), type: .lent, personName: friend.name,
                 contactPhone: friend.phone,
                 amount: friend.share,
                 note: note,
-                date: Date()
+                date: Date(),
+                splitGroupId: splitGroupId
             )
-            // Store the splitGroupId in a dedicated Firestore field by saving it after
-            let lbRef = userRef().collection("lendborrows").document(lb.id.uuidString)
-            var lbDict = lb.toFirestoreDict()
-            lbDict["splitGroupId"] = splitGroupId
-            lbRef.setData(lbDict)
+            addLendBorrow(lb)
         }
     }
 

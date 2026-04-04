@@ -124,6 +124,7 @@ struct LendBorrow: Identifiable, Codable {
     var dueDate      : Date?
     var isPaid       : Bool = false
     var paidDate     : Date? = nil
+    var splitGroupId : String? = nil   // non-nil for lend/borrow records created from a split
 
     // Computed
     var remainingAmount: Double  { isPaid ? 0 : max(0, amount - paidAmount) }

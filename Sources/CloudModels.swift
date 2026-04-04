@@ -168,6 +168,7 @@ extension LendBorrow {
         if let p  = contactPhone { d["contactPhone"] = p }
         if let dd = dueDate      { d["dueDate"]      = Timestamp(date: dd) }
         if let pd = paidDate     { d["paidDate"]     = Timestamp(date: pd) }
+        if let sg = splitGroupId { d["splitGroupId"] = sg }
         return d
     }
 
@@ -191,7 +192,8 @@ extension LendBorrow {
             date:         ts.dateValue(),
             dueDate:      (dict["dueDate"]  as? Timestamp)?.dateValue(),
             isPaid:       dict["isPaid"]    as? Bool ?? false,
-            paidDate:     (dict["paidDate"] as? Timestamp)?.dateValue()
+            paidDate:     (dict["paidDate"] as? Timestamp)?.dateValue(),
+            splitGroupId: dict["splitGroupId"] as? String
         )
     }
 }

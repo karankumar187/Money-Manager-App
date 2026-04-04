@@ -687,18 +687,11 @@ struct LBEntryCard: View {
                         } else {
                             Image(systemName: "circle").foregroundColor(.textTertiary)
                         }
-                        Text(entry.note
-                            .replacingOccurrences(of: #"\s*\[sl:[^\]]+\]"#, with: "", options: .regularExpression)
-                            .trimmingCharacters(in: .whitespaces)
-                             .isEmpty
-                             ? "No note"
-                             : entry.note
-                                .replacingOccurrences(of: #"\s*\[sl:[^\]]+\]"#, with: "", options: .regularExpression)
-                                .trimmingCharacters(in: .whitespaces))
+                        Text(entry.note.isEmpty ? "No note" : entry.note)
                             .font(.system(size: 14, weight: .medium)).foregroundColor(.white)
                             .lineLimit(1)
-                        // Split badge
-                        if entry.note.contains("sl:") {
+                        // Split badge — shown for any entry created from a bill split
+                        if entry.splitGroupId != nil {
                             Text("Split")
                                 .font(.system(size: 9, weight: .bold))
                                 .foregroundColor(.catBlue)

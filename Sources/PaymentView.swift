@@ -64,8 +64,9 @@ struct PaymentView: View {
 
     @State private var selectedCategory: AppCategory? = nil
     @State private var selectedApp    : UPIApp?       = .gpay
-    @State private var showScanner    = false
-    @State private var didScanQR      = false
+    @State private var showScanner       = false
+    @State private var didScanQR         = false
+    @State private var hadUserInteraction = false  // true once user manually taps Open Camera
     @State private var showSuccess    = false
     @State private var savedAmount    : Double = 0
     @State private var noAppAlert     = false
@@ -136,6 +137,7 @@ struct PaymentView: View {
                                 // Scan QR
                                 Button {
                                     focusedField = nil
+                                    hadUserInteraction = true
                                     showScanner = true
                                 } label: {
                                     HStack(spacing: 16) {
@@ -494,12 +496,16 @@ struct PaymentView: View {
             }
         }
         .sheet(isPresented: $showScanner, onDismiss: {
-            // Only advance to step 2 if the user actually scanned a QR code
             if didScanQR {
+                // QR was scanned — advance to payment details
                 didScanQR = false
                 withAnimation(.spring(response: 0.4)) { currentStep = 2 }
+            } else if currentStep == 1 && !hadUserInteraction {
+                // Camera was auto-opened on launch and user closed it without scanning
+                // → dismiss the whole PaymentView (they tapped the pay button accidentally)
+                dismiss()
             }
-            // Otherwise just close the camera — stay on step 1
+            // If user explicitly tapped "Open Camera" from step 1 and cancelled → stay on step 1
         }) {
             QRScannerView { data in
                 didScanQR = true
