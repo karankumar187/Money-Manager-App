@@ -44,6 +44,9 @@ struct MoneyManagerApp: App {
                 .environmentObject(auth)
                 .environmentObject(store)
                 .preferredColorScheme(.dark)
+                .onOpenURL { url in
+                    let _ = Auth.auth().canHandle(url)
+                }
         }
     }
 }
