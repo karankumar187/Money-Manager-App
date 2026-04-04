@@ -37,7 +37,12 @@ class AuthService: NSObject, ObservableObject, AuthUIDelegate {
         do {
             let vid = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<String, Error>) in
                 PhoneAuthProvider.provider().verifyPhoneNumber("+91\(phoneNumber)", uiDelegate: self) { verificationID, error in
-                    if let error = error {
+                    if let error = error as NSError? {
+                        print("🔥 Firebase Auth Error: \(error.localizedDescription)")
+                        print("🔥 Error User Info: \(error.userInfo)")
+                        if let underlying = error.userInfo[NSUnderlyingErrorKey] as? NSError {
+                            print("🔥 Underlying Error: \(underlying.localizedDescription) - \(underlying.userInfo)")
+                        }
                         continuation.resume(throwing: error)
                         return
                     }
