@@ -6,7 +6,7 @@ import Combine
 // Handles phone OTP sign-in via Firebase Authentication.
 
 @MainActor
-class AuthService: ObservableObject {
+class AuthService: NSObject, ObservableObject, AuthUIDelegate {
 
     @Published var currentUser: FirebaseAuth.User? = Auth.auth().currentUser
     @Published var error: String? = nil
@@ -15,7 +15,8 @@ class AuthService: ObservableObject {
     private var verificationID: String? = nil
     private var handle: AuthStateDidChangeListenerHandle?
 
-    init() {
+    override init() {
+        super.init()
         // Listen for auth state changes (handles auto-restore on app launch)
         handle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
             self?.currentUser = user
@@ -34,7 +35,7 @@ class AuthService: ObservableObject {
         error = nil
         do {
             let vid = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<String, Error>) in
-                PhoneAuthProvider.provider().verifyPhoneNumber("+91\(phoneNumber)", uiDelegate: nil) { verificationID, error in
+                PhoneAuthProvider.provider().verifyPhoneNumber("+91\(phoneNumber)", uiDelegate: self) { verificationID, error in
                     if let error = error {
                         continuation.resume(throwing: error)
                         return
