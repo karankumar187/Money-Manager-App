@@ -61,7 +61,7 @@ struct ProfileSetupView: View {
                                 .overlay(Circle().stroke(Color.bgPrimary, lineWidth: 2))
                         }
                     }
-                    .onChange(of: photoItem) { _, item in
+                    .onChange(of: photoItem) { item in
                         Task {
                             imageData = try? await item?.loadTransferable(type: Data.self)
                         }

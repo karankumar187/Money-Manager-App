@@ -146,7 +146,7 @@ struct LoginView: View {
             }
         }
         .onChange(of: auth.error) { _ in } // Refresh on error
-        .onChange(of: auth.isLoading) { _, loading in
+        .onChange(of: auth.isLoading) { loading in
             if !loading && auth.error == nil && step == 0 {
                 withAnimation(.spring()) { step = 1 }
             }

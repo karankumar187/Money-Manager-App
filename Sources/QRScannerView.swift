@@ -134,7 +134,7 @@ struct QRScannerView: View {
                         .background(RoundedRectangle(cornerRadius: 18).fill(Color.white.opacity(0.12)))
                         .overlay(RoundedRectangle(cornerRadius: 18).stroke(Color.white.opacity(0.1), lineWidth: 1))
                     }
-                    .onChange(of: qrPhotoItem) { _, newItem in
+                    .onChange(of: qrPhotoItem) { newItem in
                         Task {
                             if let data = try? await newItem?.loadTransferable(type: Data.self),
                                let uiImage = UIImage(data: data) {
