@@ -47,7 +47,7 @@ fun AuthScreen(onAuthSuccess: () -> Unit) {
 
     // Google Sign-In setup
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestIdToken("YOUR_WEB_CLIENT_ID") // Replace with your Web Client ID from Firebase Console
+        .requestIdToken("15851664920-ppsr2d6d969nbqfhv3a9j0np0eqdf90l.apps.googleusercontent.com")
         .requestEmail()
         .build()
     val googleClient = GoogleSignIn.getClient(context, gso)
