@@ -44,7 +44,7 @@ enum UPIApp: String, Codable, CaseIterable, Identifiable {
         case .gpay:    basePath = "gpay://upi/pay"
         case .phonepe: basePath = "phonepe://pay"
         case .kotak:   basePath = "kotak811://upi/pay"
-        case .slice:   basePath = "slice://pay"
+        case .slice:   basePath = "slice-upi://pay"
         }
         
         var components = URLComponents(string: basePath)
