@@ -38,22 +38,15 @@ enum UPIApp: String, Codable, CaseIterable, Identifiable {
         }
     }
 
-    func makeURL(upiId: String, name: String) -> URL? {
-        let basePath: String
+    func makeURL() -> URL? {
+        let urlStr: String
         switch self {
-        case .gpay:    basePath = "gpay://upi/pay"
-        case .phonepe: basePath = "phonepe://pay"
-        case .kotak:   basePath = "kotak811://upi/pay"
-        case .slice:   basePath = "slice-upi://pay"
+        case .gpay:    urlStr = "tez://"
+        case .phonepe: urlStr = "phonepe://"
+        case .kotak:   urlStr = "kotak811://"
+        case .slice:   urlStr = "slice://"
         }
-        
-        var components = URLComponents(string: basePath)
-        components?.queryItems = [
-            URLQueryItem(name: "pa", value: upiId),
-            URLQueryItem(name: "pn", value: name.isEmpty ? "Merchant" : name),
-            URLQueryItem(name: "cu", value: "INR")
-        ]
-        return components?.url
+        return URL(string: urlStr)
     }
 }
 
