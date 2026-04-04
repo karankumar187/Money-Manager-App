@@ -80,4 +80,26 @@ class AuthService: NSObject, ObservableObject, AuthUIDelegate {
         try? Auth.auth().signOut()
         currentUser = nil
     }
+
+    // MARK: - AuthUIDelegate
+    func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+        // Find the active UIWindowScene and its key root view controller in modern SwiftUI
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootVC = windowScene.windows.first(where: \.isKeyWindow)?.rootViewController {
+            rootVC.present(viewControllerToPresent, animated: flag, completion: completion)
+        } else if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let rootVC = windowScene.windows.first?.rootViewController {
+            rootVC.present(viewControllerToPresent, animated: flag, completion: completion)
+        }
+    }
+
+    func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootVC = windowScene.windows.first(where: \.isKeyWindow)?.rootViewController {
+            rootVC.dismiss(animated: flag, completion: completion)
+        } else if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let rootVC = windowScene.windows.first?.rootViewController {
+            rootVC.dismiss(animated: flag, completion: completion)
+        }
+    }
 }
