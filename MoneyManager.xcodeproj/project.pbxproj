@@ -57,6 +57,7 @@
 		A6B7BBA5BD18AD79788CC025 /* SplitExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitExpenseView.swift; sourceTree = "<group>"; };
 		A9A2ACB4CCFCFAF821D7D6C8 /* LendBorrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LendBorrowView.swift; sourceTree = "<group>"; };
 		C555460308FD0A40854754C3 /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
+		CD66743E2F81A19500EF9685 /* MoneyManager-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MoneyManager-Info.plist"; sourceTree = "<group>"; };
 		D3AD0545F2DB4B15E1E160D0 /* MoneyManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoneyManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D49B0366EC866802B0AFB124 /* ContactPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactPickerView.swift; sourceTree = "<group>"; };
 		E7C428B0E3CE8EA3A4CF18CD /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -81,6 +82,7 @@
 		1137AD2659291AA67BDE996B = {
 			isa = PBXGroup;
 			children = (
+				CD66743E2F81A19500EF9685 /* MoneyManager-Info.plist */,
 				AC2E1D740BD74F188F4ED0F3 /* Sources */,
 				5E06FD11688B491327CF6AA6 /* Products */,
 			);
@@ -241,6 +243,7 @@
 				DEVELOPMENT_TEAM = 5366HDN475;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MoneyManager-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = MoneyManager;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Scan UPI QR codes to auto-fill recipient details";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Choose a profile picture or upload a QR code";
@@ -335,6 +338,7 @@
 				DEVELOPMENT_TEAM = 5366HDN475;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "MoneyManager-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = MoneyManager;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Scan UPI QR codes to auto-fill recipient details";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Choose a profile picture or upload a QR code";
