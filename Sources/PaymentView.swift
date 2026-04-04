@@ -65,6 +65,7 @@ struct PaymentView: View {
     @State private var selectedCategory: AppCategory? = nil
     @State private var selectedApp    : UPIApp?       = .gpay
     @State private var showScanner    = false
+    @State private var didScanQR      = false
     @State private var showSuccess    = false
     @State private var savedAmount    : Double = 0
     @State private var noAppAlert     = false
@@ -493,12 +494,15 @@ struct PaymentView: View {
             }
         }
         .sheet(isPresented: $showScanner, onDismiss: {
-            // If dismissed without scanning (no QR data), go to details page anyway
-            if currentStep == 1 {
+            // Only advance to step 2 if the user actually scanned a QR code
+            if didScanQR {
+                didScanQR = false
                 withAnimation(.spring(response: 0.4)) { currentStep = 2 }
             }
+            // Otherwise just close the camera — stay on step 1
         }) {
             QRScannerView { data in
+                didScanQR = true
                 applyQRData(data)
             }
         }
