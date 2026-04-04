@@ -588,7 +588,7 @@ struct SendMoneySheet: View {
         // 4. If UPI available: copy + open app
         if hasUPI {
             UIPasteboard.general.string = upi
-            if let url = selectedApp.makeURL() {
+            if let url = selectedApp.makeURL(upiId: upi, name: personName) {
                 UIApplication.shared.open(url)
             }
             onPaid()  // triggers clipboard hint banner
