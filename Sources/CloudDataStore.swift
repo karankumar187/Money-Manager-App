@@ -199,15 +199,44 @@ class CloudDataStore: ObservableObject {
                 let from = docs.compactMap { SharedLedger.from($0.data()) }
                 self.mergeSharedLedgers(from)
             }
-        // Second listener for incoming ledgers
+        // Second listener for incoming ledgers (I am the borrower)
         db.collection("shared_ledgers")
             .whereField("toPhone", isEqualTo: phone)
             .addSnapshotListener { [weak self] snap, _ in
                 guard let self, let docs = snap?.documents else { return }
-                let to = docs.compactMap { SharedLedger.from($0.data()) }
-                self.mergeSharedLedgers(to)
+                let incoming = docs.compactMap { SharedLedger.from($0.data()) }
+                self.mergeSharedLedgers(incoming)
+                // Auto-create a LendBorrow(.borrowed) for each incoming ledger
+                // that hasn't already been synced to this user's collection
+                self.syncIncomingSplitsAsBorrowed(incoming)
             }
     }
+
+    // Creates a local LendBorrow(.borrowed) record for each incoming SharedLedger
+    // the first time the recipient opens the app — idempotent via the sharedLedgerId note tag.
+    private func syncIncomingSplitsAsBorrowed(_ ledgers: [SharedLedger]) {
+        for ledger in ledgers where !ledger.isPaid {
+            let marker = "sl:\(ledger.id)"   // unique marker stored in the note field
+            // Skip if we already synced this ledger
+            let alreadySynced = lendBorrows.contains { $0.note.contains(marker) }
+            if alreadySynced { continue }
+
+            // Auto-save the lender as a contact
+            addPaymentContact(name: ledger.fromName, phone: ledger.fromPhone)
+
+            // Create the borrowed record
+            let lb = LendBorrow(
+                id: UUID(), type: .borrowed,
+                personName: ledger.fromName,
+                contactPhone: ledger.fromPhone,
+                amount: ledger.amount,
+                note: "\(ledger.note) [\(marker)]",
+                date: ledger.date
+            )
+            addLendBorrow(lb)
+        }
+    }
+
 
     private func mergeSharedLedgers(_ new: [SharedLedger]) {
         var dict = Dictionary(uniqueKeysWithValues: sharedLedgers.map { ($0.id, $0) })
@@ -327,6 +356,12 @@ class CloudDataStore: ObservableObject {
         updated.isPaid   = true
         updated.paidDate = Date()
         db.collection("shared_ledgers").document(ledger.id).setData(updated.toDict())
+
+        // Also mark the auto-synced LendBorrow on the borrower's side as paid
+        let marker = "sl:\(ledger.id)"
+        if let lb = lendBorrows.first(where: { $0.note.contains(marker) }) {
+            markPaid(lb)
+        }
     }
 
     // Split a bill: deducts your share and creates shared ledgers for each friend
