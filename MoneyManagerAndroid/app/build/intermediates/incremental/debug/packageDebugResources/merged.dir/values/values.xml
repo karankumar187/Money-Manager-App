@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Money Manager</string>
+    <string name="default_web_client_id" translatable="false">15851664920-ppsr2d6d969nbqfhv3a9j0np0eqdf90l.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">15851664920</string>
+    <string name="google_api_key" translatable="false">AIzaSyCBhpi3HStF9E-e8BAUM31ykW08CC-MHoY</string>
+    <string name="google_app_id" translatable="false">1:15851664920:android:957660b0d20663ec89b56d</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCBhpi3HStF9E-e8BAUM31ykW08CC-MHoY</string>
+    <string name="google_storage_bucket" translatable="false">money-manager-84cdc.firebasestorage.app</string>
+    <string name="project_id" translatable="false">money-manager-84cdc</string>
+    <style name="Theme.MoneyManager" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">#161618</item>
+        <item name="android:statusBarColor">#161618</item>
+        <item name="android:navigationBarColor">#161618</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

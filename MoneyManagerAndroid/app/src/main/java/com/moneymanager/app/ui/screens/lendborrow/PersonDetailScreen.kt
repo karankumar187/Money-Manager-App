@@ -320,7 +320,7 @@ private fun LBEntryCard(lb: LendBorrow, viewModel: MainViewModel, onPartialPay: 
                         onClick = onPartialPay,
                         modifier = Modifier.weight(1f).height(36.dp),
                         shape = RoundedCornerShape(10.dp),
-                        colors = OutlinedButtonDefaults.colors(contentColor = color),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = color),
                         border = BorderStroke(1.dp, color.copy(alpha = 0.3f))
                     ) { Text("Partial", fontSize = 12.sp, fontWeight = FontWeight.SemiBold) }
                     Button(

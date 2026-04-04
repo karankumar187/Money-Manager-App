@@ -173,7 +173,7 @@ fun AuthScreen(onAuthSuccess: () -> Unit) {
                         onClick = { googleLauncher.launch(googleClient.signInIntent) },
                         modifier = Modifier.fillMaxWidth().height(52.dp),
                         shape = RoundedCornerShape(14.dp),
-                        colors = OutlinedButtonDefaults.colors(contentColor = TextPrimary),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary),
                         border = androidx.compose.foundation.BorderStroke(1.dp, BgCardAlt)
                     ) {
                         Text("Continue with Google", fontWeight = FontWeight.SemiBold)

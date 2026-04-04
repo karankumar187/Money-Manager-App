@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.moneymanager.app-mergeDebugResources-64:/values-v21/values-v21.xml",
+            "outputFile": "com.moneymanager.app-mergeDebugResources-63:/values-v21/values-v21.xml",
             "map": [
                 {
-                    "source": "/Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/res/values-v21/values-v21.xml",
+                    "source": "/Users/karankumar/.gradle/caches/9.0.0/transforms/14d54e3abccacc953885676129102892/transformed/credentials-play-services-auth-1.2.0-rc01/res/values-v21/values-v21.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "/Users/karankumar/.gradle/caches/9.0.0/transforms/bb4ec8182a674f9dcb5d5db8ddf0baf5/transformed/core-1.13.1/res/values-v21/values-v21.xml",
+                    "source": "/Users/karankumar/.gradle/caches/9.0.0/transforms/a512ae92622fe7e82bd4b3ac576855ea/transformed/core-1.13.1/res/values-v21/values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,13",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",
