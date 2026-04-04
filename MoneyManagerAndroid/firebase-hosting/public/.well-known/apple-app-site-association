@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [{
+      "appID": "REPLACE_WITH_TEAMID.com.moneymanager.ios",
+      "paths": ["/pay*", "/contact*", "/split*", "/settle*"]
+    }]
+  },
+  "webcredentials": {
+    "apps": ["REPLACE_WITH_TEAMID.com.moneymanager.ios"]
+  }
+}
