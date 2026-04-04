@@ -131,7 +131,7 @@ struct PaymentView: View {
                             .padding(.top, 48).padding(.bottom, 40)
 
                             // ── Options ────────────────────────────────────────
-                            VStack(spacing: 12) {
+                            VStack(spacing: 0) {
                                 // Scan QR
                                 Button {
                                     focusedField = nil
@@ -149,8 +149,10 @@ struct PaymentView: View {
                                         Spacer()
                                         Image(systemName: "chevron.right").font(.system(size: 13, weight: .semibold)).foregroundColor(.textTertiary)
                                     }
-                                    .padding(16).glassCard(radius: 16)
+                                    .padding(.vertical, 16).padding(.horizontal, 16)
                                 }
+                                
+                                Divider().background(Color.white.opacity(0.07)).padding(.leading, 70)
 
                                 // Upload QR
                                 PhotosPicker(selection: $qrPhotoItem, matching: .images, photoLibrary: .shared()) {
@@ -166,7 +168,7 @@ struct PaymentView: View {
                                         Spacer()
                                         Image(systemName: "chevron.right").font(.system(size: 13, weight: .semibold)).foregroundColor(.textTertiary)
                                     }
-                                    .padding(16).glassCard(radius: 16)
+                                    .padding(.vertical, 16).padding(.horizontal, 16)
                                 }
                                 .onChange(of: qrPhotoItem) { newItem in
                                     Task {
@@ -177,8 +179,10 @@ struct PaymentView: View {
                                     }
                                 }
 
+                                Divider().background(Color.white.opacity(0.07)).padding(.leading, 70)
+
                                 // Type manually
-                                VStack(spacing: 10) {
+                                VStack(spacing: 12) {
                                     HStack(spacing: 16) {
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 12).fill(Color.catOrange.opacity(0.15)).frame(width: 44, height: 44)
@@ -202,8 +206,9 @@ struct PaymentView: View {
                                     .background(Color.white.opacity(0.06))
                                     .clipShape(RoundedRectangle(cornerRadius: 12))
                                 }
-                                .padding(16).glassCard(radius: 16)
+                                .padding(.vertical, 16).padding(.horizontal, 16)
                             }
+                            .glassCard(radius: 20)
                             .padding(.horizontal, 20)
 
                             // Continue button
@@ -251,200 +256,158 @@ struct PaymentView: View {
                             }
                             .padding(.horizontal, 20).padding(.top, 8).padding(.bottom, 20)
 
-                            // ── Amount Hero Card ───────────────────────────────
-                            VStack(spacing: 6) {
-                                Text("AMOUNT")
-                                    .font(.system(size: 10, weight: .bold))
-                                    .foregroundColor(.textSecondary)
-                                    .tracking(2)
-
-                                HStack(alignment: .center, spacing: 6) {
+                            // ── Modern Floating Amount ──────────────────────────────
+                            VStack(spacing: 8) {
+                                HStack(alignment: .center, spacing: 4) {
                                     Text(store.currencySymbol)
-                                        .font(.system(size: 32, weight: .semibold))
-                                        .foregroundColor(.accent1.opacity(0.8))
-                                        .padding(.top, 8)
+                                        .font(.system(size: 40, weight: .semibold))
+                                        .foregroundColor(amountStr.isEmpty ? .textSecondary.opacity(0.5) : .accent1)
+                                        .padding(.bottom, 6)
                                     TextField("0", text: $amountStr)
                                         .focused($focusedField, equals: .amount)
                                         .keyboardType(.decimalPad)
-                                        .font(.system(size: 56, weight: .bold, design: .rounded))
-                                        .foregroundColor(.white)
+                                        .font(.system(size: 68, weight: .bold, design: .rounded))
+                                        .foregroundColor(amountStr.isEmpty ? .textSecondary.opacity(0.3) : .white)
                                         .multilineTextAlignment(.center)
                                         .minimumScaleFactor(0.5)
-                                        .frame(maxWidth: .infinity)
+                                        .fixedSize(horizontal: true, vertical: false)
                                 }
                                 .frame(maxWidth: .infinity)
-
+                                
                                 if !amountStr.isEmpty, let amt = Double(amountStr), amt > 0 {
                                     Text(store.formatted(amt))
-                                        .font(.system(size: 13)).foregroundColor(.textSecondary)
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.textSecondary)
                                         .transition(.opacity)
+                                } else {
+                                    Text("Enter amount")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(.textSecondary.opacity(0.5))
                                 }
                             }
-                            .padding(.vertical, 24).padding(.horizontal, 20)
-                            .background(
-                                LinearGradient(
-                                    colors: [Color.accent1.opacity(0.08), Color.bgCard.opacity(0.4)],
-                                    startPoint: .top, endPoint: .bottom)
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 24))
-                            .overlay(RoundedRectangle(cornerRadius: 24).stroke(Color.accent1.opacity(0.15), lineWidth: 1))
-                            .padding(.horizontal, 20).padding(.bottom, 20)
+                            .padding(.top, 16).padding(.bottom, 32)
 
-                            // ── Recipient + Note Card ──────────────────────────
-                            VStack(spacing: 0) {
-                                HStack(spacing: 14) {
-                                    ZStack {
-                                        Circle().fill(Color.accent1.opacity(0.15)).frame(width: 38, height: 38)
-                                        Image(systemName: "person.fill").foregroundColor(.accent1).font(.system(size: 16))
+                            // ── Category Pills (Subtle, beneath amount) ───────────
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 8) {
+                                    Spacer(minLength: 20)
+                                    ForEach(store.categories) { cat in
+                                        let isSelected = selectedCategory?.id == cat.id
+                                        Button {
+                                            withAnimation(.spring(response: 0.25)) { selectedCategory = cat }
+                                        } label: {
+                                            HStack(spacing: 6) {
+                                                Text(cat.emoji).font(.system(size: 14))
+                                                Text(cat.name.components(separatedBy: " ").first ?? cat.name)
+                                                    .font(.system(size: 13, weight: .medium))
+                                                    .foregroundColor(isSelected ? .white : .textSecondary)
+                                            }
+                                            .padding(.horizontal, 16).padding(.vertical, 10)
+                                            .background(isSelected ? cat.color.opacity(0.25) : Color.white.opacity(0.04))
+                                            .clipShape(Capsule())
+                                            .overlay(Capsule().stroke(isSelected ? cat.color.opacity(0.5) : Color.white.opacity(0.08), lineWidth: 1))
+                                        }
                                     }
+                                    Spacer(minLength: 20)
+                                }
+                            }
+                            .padding(.bottom, 24)
+
+                            // ── Unified Form Block ─────────────────────────────
+                            VStack(spacing: 0) {
+                                // Recipient
+                                HStack(spacing: 14) {
+                                    Image(systemName: "person.fill").foregroundColor(.textSecondary).frame(width: 24)
                                     TextField("Who are you paying?", text: $recipientName)
                                         .focused($focusedField, equals: .name)
-                                        .font(.system(size: 15)).foregroundColor(.white)
+                                        .font(.system(size: 16)).foregroundColor(.white)
                                 }
-                                .padding(.horizontal, 16).padding(.vertical, 14)
+                                .padding(.horizontal, 16).padding(.vertical, 16)
 
-                                Divider().background(Color.white.opacity(0.07)).padding(.horizontal, 16)
+                                Divider().background(Color.white.opacity(0.06)).padding(.leading, 54)
 
+                                // Note
                                 HStack(spacing: 14) {
-                                    ZStack {
-                                        Circle().fill(Color.catPurple.opacity(0.15)).frame(width: 38, height: 38)
-                                        Image(systemName: "note.text").foregroundColor(.catPurple).font(.system(size: 16))
-                                    }
+                                    Image(systemName: "note.text").foregroundColor(.textSecondary).frame(width: 24)
                                     TextField("Add a note (dinner, rent…)", text: $note)
                                         .focused($focusedField, equals: .note)
-                                        .font(.system(size: 15)).foregroundColor(.white)
+                                        .font(.system(size: 16)).foregroundColor(.white)
                                 }
-                                .padding(.horizontal, 16).padding(.vertical, 14)
-                            }
-                            .glassCard(radius: 20)
-                            .padding(.horizontal, 20).padding(.bottom, 20)
+                                .padding(.horizontal, 16).padding(.vertical, 16)
 
-                            // ── Category Pills ─────────────────────────────────
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text("CATEGORY")
-                                    .font(.system(size: 10, weight: .bold))
-                                    .foregroundColor(.textSecondary).tracking(2)
-                                    .padding(.horizontal, 24)
+                                Divider().background(Color.white.opacity(0.06)).padding(.leading, 54)
 
+                                // Pay Via
                                 ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 8) {
-                                        Spacer(minLength: 20)
-                                        ForEach(store.categories) { cat in
-                                            let isSelected = selectedCategory?.id == cat.id
-                                            Button {
-                                                withAnimation(.spring(response: 0.25)) { selectedCategory = cat }
-                                            } label: {
-                                                HStack(spacing: 6) {
-                                                    Text(cat.emoji).font(.system(size: 14))
-                                                    Text(cat.name.components(separatedBy: " ").first ?? cat.name)
-                                                        .font(.system(size: 12, weight: .semibold))
-                                                        .foregroundColor(isSelected ? .white : .textSecondary)
-                                                }
-                                                .padding(.horizontal, 14).padding(.vertical, 8)
-                                                .background(isSelected
-                                                    ? cat.color.opacity(0.25)
-                                                    : Color.white.opacity(0.06))
-                                                .clipShape(Capsule())
-                                                .overlay(Capsule().stroke(isSelected ? cat.color.opacity(0.6) : Color.clear, lineWidth: 1))
-                                            }
-                                        }
-                                        Spacer(minLength: 20)
-                                    }
-                                }
-                            }
-                            .padding(.bottom, 20)
-
-                            // ── Pay Via Row ────────────────────────────────────
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text("PAY VIA")
-                                    .font(.system(size: 10, weight: .bold))
-                                    .foregroundColor(.textSecondary).tracking(2)
-                                    .padding(.horizontal, 24)
-
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 12) {
-                                        Spacer(minLength: 16)
+                                    HStack(spacing: 16) {
+                                        Spacer(minLength: 4)
+                                        Text("Pay Via").font(.system(size: 13, weight: .medium)).foregroundColor(.textSecondary)
                                         ForEach(UPIApp.allCases) { app in
-                                            UPILogoButton(app: app, isSelected: selectedApp == app) {
-                                                withAnimation { selectedApp = app }
-                                            }
-                                        }
-                                        // Log Only button
-                                        Button { withAnimation { selectedApp = nil } } label: {
-                                            VStack(spacing: 8) {
+                                            Button { withAnimation { selectedApp = app } } label: {
                                                 ZStack {
-                                                    RoundedRectangle(cornerRadius: 18)
-                                                        .fill(selectedApp == nil ? Color.bgCard : Color.bgCard.opacity(0.5))
-                                                        .frame(width: 62, height: 62)
-                                                        .overlay(RoundedRectangle(cornerRadius: 18)
-                                                            .stroke(selectedApp == nil ? Color.accent1 : Color.clear, lineWidth: 3))
-                                                    Image(systemName: "square.and.pencil")
-                                                        .font(.system(size: 26))
-                                                        .foregroundColor(selectedApp == nil ? .accent1 : .textSecondary)
+                                                    Circle().fill(Color.white)
+                                                        .frame(width: 44, height: 44)
+                                                        .overlay(Circle().stroke(selectedApp == app ? app.color : Color.clear, lineWidth: 3))
+                                                    if app.logoName.isEmpty {
+                                                        Image(systemName: "indianrupeesign.circle.fill").resizable().frame(width: 28, height: 28).foregroundColor(app.color)
+                                                    } else {
+                                                        Image(app.logoName).resizable().scaledToFill().frame(width: 32, height: 32).clipShape(Circle())
+                                                    }
                                                 }
-                                                Text("Log Only")
-                                                    .font(.system(size: 10, weight: .semibold))
-                                                    .foregroundColor(selectedApp == nil ? .accent1 : .textSecondary)
                                             }
                                         }
-                                        .scaleEffect(selectedApp == nil ? 1.05 : 1.0)
-                                        .animation(.spring(response: 0.25), value: selectedApp == nil)
+                                        Button { withAnimation { selectedApp = nil } } label: {
+                                            ZStack {
+                                                Circle().fill(selectedApp == nil ? Color.accent1.opacity(0.2) : Color.white.opacity(0.08))
+                                                    .frame(width: 44, height: 44)
+                                                    .overlay(Circle().stroke(selectedApp == nil ? Color.accent1 : Color.clear, lineWidth: 2))
+                                                Image(systemName: "square.and.pencil").font(.system(size: 20)).foregroundColor(selectedApp == nil ? .accent1 : .textSecondary)
+                                            }
+                                        }
                                         Spacer(minLength: 16)
                                     }
                                 }
-                            }
-                            .padding(.bottom, 20)
+                                .padding(.vertical, 16)
 
-                            // ── Split toggle ───────────────────────────────
-                            HStack(spacing: 12) {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 10).fill(Color.catBlue.opacity(0.15)).frame(width: 38, height: 38)
-                                    Image(systemName: "person.2.fill").foregroundColor(.catBlue).font(.system(size: 16))
-                                }
-                                VStack(alignment: .leading, spacing: 1) {
-                                    Text("Split with Friends").font(.system(size: 14, weight: .medium)).foregroundColor(.white)
-                                    if isSplitEnabled && finalSplitFriends.isEmpty {
-                                        Text("Tap to setup split").font(.system(size: 11)).foregroundColor(.catBlue)
-                                    } else if isSplitEnabled {
-                                        Text("Splitting with \(finalSplitFriends.count) people").font(.system(size: 11)).foregroundColor(.catBlue)
-                                    } else {
-                                        Text("Divide expense with contacts").font(.system(size: 11)).foregroundColor(.textSecondary)
-                                    }
-                                }
-                                Spacer()
-                                Toggle("", isOn: $isSplitEnabled)
-                                    .toggleStyle(SwitchToggleStyle(tint: .catBlue)).labelsHidden()
-                                    .onChange(of: isSplitEnabled) { val in
-                                        if val { showSplitSheet = true }
-                                        else {
-                                            isSplitEnabled = false
-                                            finalSplitFriends = []
-                                        }
-                                    }
-                            }
-                            .padding(16).glassCard(radius: 18).padding(.horizontal, 20).padding(.bottom, 8)
-                            .onTapGesture {
-                                if isSplitEnabled { showSplitSheet = true }
-                            }
+                                Divider().background(Color.white.opacity(0.06)).padding(.leading, 54)
 
-                            // ── Record as Lend toggle ──────────────────────────
-                            if !isSplitEnabled {
-                                HStack(spacing: 12) {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 10).fill(Color.incomeGreen.opacity(0.15)).frame(width: 38, height: 38)
-                                        Image(systemName: "arrow.up.circle").foregroundColor(.incomeGreen).font(.system(size: 16))
-                                    }
-                                    VStack(alignment: .leading, spacing: 1) {
-                                        Text("Record as Lend").font(.system(size: 14, weight: .medium)).foregroundColor(.white)
-                                        Text("Track in your lending history").font(.system(size: 11)).foregroundColor(.textSecondary)
+                                // Split Toggle
+                                HStack(spacing: 14) {
+                                    Image(systemName: "person.2.fill").foregroundColor(.catBlue).frame(width: 24)
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("Split with Friends").font(.system(size: 15, weight: .medium)).foregroundColor(.white)
+                                        if isSplitEnabled && finalSplitFriends.isEmpty { Text("Tap to setup").font(.system(size: 12)).foregroundColor(.catBlue) }
+                                        else if isSplitEnabled { Text("Splitting with \(finalSplitFriends.count)").font(.system(size: 12)).foregroundColor(.catBlue) }
                                     }
                                     Spacer()
-                                    Toggle("", isOn: $recordAsLend).toggleStyle(SwitchToggleStyle(tint: .incomeGreen)).labelsHidden()
+                                    Toggle("", isOn: $isSplitEnabled).toggleStyle(SwitchToggleStyle(tint: .catBlue)).labelsHidden()
+                                        .onChange(of: isSplitEnabled) { val in
+                                            if val { showSplitSheet = true }
+                                            else {
+                                                isSplitEnabled = false
+                                                finalSplitFriends = []
+                                            }
+                                        }
                                 }
-                                .padding(16).glassCard(radius: 18).padding(.horizontal, 20).padding(.bottom, 20)
-                            } else {
-                                Color.clear.frame(height: 12)
+                                .padding(.horizontal, 16).padding(.vertical, 14)
+                                .onTapGesture { if isSplitEnabled { showSplitSheet = true } }
+
+                                if !isSplitEnabled {
+                                    Divider().background(Color.white.opacity(0.06)).padding(.leading, 54)
+                                    // Lend Toggle
+                                    HStack(spacing: 14) {
+                                        Image(systemName: "arrow.up.circle.fill").foregroundColor(.incomeGreen).frame(width: 24)
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text("Record as Lend").font(.system(size: 15, weight: .medium)).foregroundColor(.white)
+                                        }
+                                        Spacer()
+                                        Toggle("", isOn: $recordAsLend).toggleStyle(SwitchToggleStyle(tint: .incomeGreen)).labelsHidden()
+                                    }
+                                    .padding(.horizontal, 16).padding(.vertical, 14)
+                                }
                             }
+                            .glassCard(radius: 24)
+                            .padding(.horizontal, 20).padding(.bottom, 24)
 
                             // ── Pay Button ─────────────────────────────────────
                             Button { handlePay() } label: {
