@@ -118,7 +118,7 @@ struct ProfileSettingsView: View {
             Color.bgPrimary.ignoresSafeArea()
             VStack(spacing: 24) {
                 // Avatar
-                PhotosPicker(selection: $profileItem, matching: .images, photoLibrary: .shared()) {
+                PhotosPicker(selection: $profileItem, matching: .images) {
                     if let data = store.userProfileImageData, let uiImage = UIImage(data: data) {
                         Image(uiImage: uiImage).resizable().scaledToFill()
                             .frame(width: 90, height: 90).clipShape(Circle())
