@@ -41,18 +41,23 @@ enum UPIApp: String, Codable, CaseIterable, Identifiable {
     func makeURL(upiId: String, name: String, amount: Double) -> URL? {
         let basePath: String
         switch self {
-        case .gpay:    basePath = "tez://upi/pay"
+        case .gpay:    basePath = "gpay://upi/pay"
         case .phonepe: basePath = "phonepe://pay"
         case .kotak:   basePath = "kotak811://upi/pay"
-        case .slice:   basePath = "slicepay://upi/pay"
+        case .slice:   basePath = "slice://pay"
         }
         
         var components = URLComponents(string: basePath)
+        let trRef = "MM\(Int(Date().timeIntervalSince1970))"
+        let safeName = name.isEmpty ? "Merchant" : name
+        
         components?.queryItems = [
             URLQueryItem(name: "pa", value: upiId),
-            URLQueryItem(name: "pn", value: name.isEmpty ? "Merchant" : name),
+            URLQueryItem(name: "pn", value: safeName),
             URLQueryItem(name: "am", value: String(format: "%.2f", amount)),
-            URLQueryItem(name: "cu", value: "INR")
+            URLQueryItem(name: "cu", value: "INR"),
+            URLQueryItem(name: "tr", value: trRef),
+            URLQueryItem(name: "mc", value: "0000")
         ]
         return components?.url
     }

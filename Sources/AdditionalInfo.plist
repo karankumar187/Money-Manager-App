@@ -7,9 +7,10 @@
         <string>tez</string>
         <string>phonepe</string>
         <string>kotak811</string>
-        <string>slicepay</string>
+        <string>slice</string>
         <string>upi</string>
         <string>amazonpay</string>
+        <string>gpay</string>
     </array>
 </dict>
 </plist>
