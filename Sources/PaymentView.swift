@@ -575,6 +575,10 @@ struct PaymentView: View {
                 t.linkedLendId = lb.id
             }
             store.addTransaction(t)
+            // Auto-create contact card so person appears in the Payments tab
+            if !recipientName.trimmingCharacters(in: .whitespaces).isEmpty {
+                store.addPaymentContact(name: recipientName, phone: upiId.isEmpty ? nil : upiId)
+            }
         }
         store.saveUPI(name: recipientName, upi: upiId)
 

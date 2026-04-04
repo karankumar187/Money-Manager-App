@@ -340,10 +340,11 @@ class CloudDataStore: ObservableObject {
         )
         addTransaction(myTx)
 
-        // Create a shared ledger for each friend
+        // Create a shared ledger + contact card + lend record for each friend
         let myPhone = userProfile?.phone ?? ""
         let myName  = userName
         for friend in friends {
+            // 1. Shared ledger (Splitwise-style public record)
             let ledger = SharedLedger(
                 id:        UUID().uuidString,
                 fromUID:   uid,
@@ -359,6 +360,19 @@ class CloudDataStore: ObservableObject {
                 isPaid:    false
             )
             db.collection("shared_ledgers").document(ledger.id).setData(ledger.toDict())
+
+            // 2. Auto-create saved contact so card appears in the Payments tab
+            addPaymentContact(name: friend.name, phone: friend.phone)
+
+            // 3. Personal lend record so balance shows on the card
+            let lb = LendBorrow(
+                id: UUID(), type: .lent, personName: friend.name,
+                contactPhone: friend.phone,
+                amount: friend.share,
+                note: (groupName.flatMap { $0.isEmpty ? nil : $0 } ?? note),
+                date: Date()
+            )
+            addLendBorrow(lb)
         }
     }
 

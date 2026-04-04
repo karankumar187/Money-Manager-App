@@ -33,7 +33,17 @@ struct PersonDetailView: View {
         store.transactions.filter { $0.recipientName == personName }.sorted { $0.date > $1.date }
     }
 
-    @State private var selectedTab = 0 // 0 = Lends, 1 = Transfers
+    // Split ledger entries involving this person (by phone number)
+    var splits: [SharedLedger] {
+        guard let contactPhone = phone else { return [] }
+        let myPhone = store.userProfile?.phone ?? ""
+        return store.sharedLedgers.filter { ledger in
+            (ledger.toPhone == contactPhone && ledger.fromPhone == myPhone) ||
+            (ledger.fromPhone == contactPhone && ledger.toPhone == myPhone)
+        }.sorted { $0.date > $1.date }
+    }
+
+    @State private var selectedTab = 0 // 0 = Lends, 1 = Splits, 2 = Transfers
 
     // Avatar color from name hash
     var avatarColor: Color {
@@ -128,10 +138,11 @@ struct PersonDetailView: View {
                         }
                         .padding(.horizontal, 20).padding(.bottom, 28)
 
-                        // ── Tabs (Lends vs Transfers) ──────────────────────
+                        // ── Tabs (Lends | Splits | Transfers) ─────────────────
                         Picker("", selection: $selectedTab) {
                             Text("Lends").tag(0)
-                            Text("Transfers").tag(1)
+                            Text("Splits").tag(1)
+                            Text("Transfers").tag(2)
                         }
                         .pickerStyle(.segmented)
                         .padding(.horizontal, 20).padding(.bottom, 24)
@@ -155,8 +166,6 @@ struct PersonDetailView: View {
                                     )
                                     .padding(.bottom, 20)
                                 }
-
-                                // ── Borrowed Section ──────────────────────────
                                 if !borrowedEntries.isEmpty {
                                     EntrySection(
                                         title: "BORROWED",
@@ -169,6 +178,32 @@ struct PersonDetailView: View {
                                     )
                                     .padding(.bottom, 20)
                                 }
+                            }
+                        } else if selectedTab == 1 {
+                            // ── Splits Section ────────────────────────────
+                            if splits.isEmpty {
+                                VStack(spacing: 12) {
+                                    Image(systemName: "person.2.slash")
+                                        .font(.system(size: 36)).foregroundColor(.textSecondary.opacity(0.4))
+                                    Text("No split expenses with this person yet.")
+                                        .font(.system(size: 14)).foregroundColor(.textSecondary)
+                                        .multilineTextAlignment(.center)
+                                }
+                                .frame(maxWidth: .infinity).padding(40)
+                            } else {
+                                VStack(spacing: 12) {
+                                    ForEach(splits) { ledger in
+                                        let iOwePaid = ledger.fromPhone == (store.userProfile?.phone ?? "")
+                                        SplitLedgerRow(
+                                            ledger: ledger,
+                                            iAmSender: iOwePaid,
+                                            currencySymbol: store.currencySymbol,
+                                            onSettle: { store.markSharedLedgerPaid(ledger) }
+                                        )
+                                        .padding(.horizontal, 20)
+                                    }
+                                }
+                                .padding(.bottom, 20)
                             }
                         } else {
                             // ── Transfers Section ──────────────────────────
@@ -925,6 +960,71 @@ struct EditEntrySheet: View {
                 if let d = entry.dueDate { hasDue = true; dueDate = d }
             }
         }
+    }
+}
+
+// MARK: - Split Ledger Row
+
+struct SplitLedgerRow: View {
+    let ledger: SharedLedger
+    let iAmSender: Bool        // true = I paid and they owe me
+    let currencySymbol: String
+    let onSettle: () -> Void
+
+    private var fmt: DateFormatter {
+        let df = DateFormatter()
+        df.dateStyle = .medium
+        df.timeStyle = .none
+        return df
+    }
+
+    var body: some View {
+        HStack(spacing: 14) {
+            // Direction indicator
+            ZStack {
+                Circle()
+                    .fill(iAmSender ? Color.incomeGreen.opacity(0.15) : Color.expenseRed.opacity(0.15))
+                    .frame(width: 42, height: 42)
+                Image(systemName: iAmSender ? "arrow.up.right" : "arrow.down.left")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(iAmSender ? .incomeGreen : .expenseRed)
+            }
+
+            VStack(alignment: .leading, spacing: 3) {
+                if let group = ledger.groupName, !group.isEmpty {
+                    Text(group)
+                        .font(.system(size: 14, weight: .semibold)).foregroundColor(.white)
+                }
+                Text(ledger.note.isEmpty ? "Split expense" : ledger.note)
+                    .font(.system(size: 13)).foregroundColor(.textSecondary)
+                    .lineLimit(1)
+                Text(fmt.string(from: ledger.date))
+                    .font(.system(size: 11)).foregroundColor(.textTertiary)
+            }
+
+            Spacer()
+
+            VStack(alignment: .trailing, spacing: 4) {
+                Text("\(iAmSender ? "+" : "-")\(currencySymbol)\(String(format: "%.0f", ledger.amount))")
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundColor(iAmSender ? .incomeGreen : .expenseRed)
+
+                if ledger.isPaid {
+                    Text("Settled ✓")
+                        .font(.system(size: 11, weight: .medium)).foregroundColor(.incomeGreen)
+                } else if iAmSender {
+                    Button("Settle") { onSettle() }
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 10).padding(.vertical, 4)
+                        .background(Color.accent1.opacity(0.8))
+                        .clipShape(Capsule())
+                }
+            }
+        }
+        .padding(16)
+        .glassCard(radius: 16)
+        .opacity(ledger.isPaid ? 0.6 : 1.0)
     }
 }
 
