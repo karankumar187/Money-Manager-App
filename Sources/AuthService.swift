@@ -33,8 +33,20 @@ class AuthService: ObservableObject {
         isLoading = true
         error = nil
         do {
-            let vid = try await PhoneAuthProvider.provider()
-                .verifyPhoneNumber("+91\(phoneNumber)", uiDelegate: nil)
+            let vid = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<String, Error>) in
+                PhoneAuthProvider.provider().verifyPhoneNumber("+91\(phoneNumber)", uiDelegate: nil) { verificationID, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                    if let vid = verificationID {
+                        continuation.resume(returning: vid)
+                    } else {
+                        let err = NSError(domain: "AuthError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Internal Error: No verification ID"])
+                        continuation.resume(throwing: err)
+                    }
+                }
+            }
             verificationID = vid
         } catch {
             self.error = error.localizedDescription
