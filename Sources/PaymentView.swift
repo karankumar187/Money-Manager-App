@@ -554,7 +554,7 @@ struct PaymentView: View {
 
         savedAmount = amount
         if let app = selectedApp, !upiId.trimmingCharacters(in: .whitespaces).isEmpty,
-           let url = app.makeURL(upiId: upiId, name: recipientName, amount: amount) {
+           let url = app.makeURL() {
             // Copy UPI ID to clipboard — user pastes it inside the app
             UIPasteboard.general.string = upiId
             withAnimation(.easeInOut(duration: 0.3)) { showClipboardHint = true }
