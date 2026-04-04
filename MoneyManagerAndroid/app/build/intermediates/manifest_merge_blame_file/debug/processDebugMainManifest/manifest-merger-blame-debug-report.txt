@@ -1,0 +1,633 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.moneymanager.app"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:4:5-67
+11-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:4:22-64
+12    <uses-permission android:name="android.permission.CAMERA" />
+12-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:5:5-65
+12-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:5:22-62
+13    <uses-permission android:name="android.permission.READ_CONTACTS" />
+13-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:6:5-72
+13-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:6:22-69
+14    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+14-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:7:5-81
+14-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:7:22-78
+15    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+15-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:8:5-77
+15-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:8:22-74
+16    <uses-permission android:name="android.permission.VIBRATE" />
+16-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:9:5-66
+16-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:9:22-63
+17
+18    <uses-feature
+18-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:11:5-85
+19        android:name="android.hardware.camera"
+19-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:11:19-57
+20        android:required="false" />
+20-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:11:58-82
+21
+22    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+22-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:26:5-79
+22-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:26:22-76
+23    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+23-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:24:5-68
+23-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:24:22-65
+24    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+24-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:26:5-82
+24-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:26:22-79
+25    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+25-->[com.google.android.recaptcha:recaptcha:18.4.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/8ef37666d09ad39d755591a922fc9466/transformed/recaptcha-18.4.0/AndroidManifest.xml:9:5-98
+25-->[com.google.android.recaptcha:recaptcha:18.4.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/8ef37666d09ad39d755591a922fc9466/transformed/recaptcha-18.4.0/AndroidManifest.xml:9:22-95
+26
+27    <permission
+27-->[androidx.core:core:1.13.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/bb4ec8182a674f9dcb5d5db8ddf0baf5/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+28        android:name="com.moneymanager.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+28-->[androidx.core:core:1.13.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/bb4ec8182a674f9dcb5d5db8ddf0baf5/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+29        android:protectionLevel="signature" />
+29-->[androidx.core:core:1.13.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/bb4ec8182a674f9dcb5d5db8ddf0baf5/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+30
+31    <uses-permission android:name="com.moneymanager.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+31-->[androidx.core:core:1.13.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/bb4ec8182a674f9dcb5d5db8ddf0baf5/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+31-->[androidx.core:core:1.13.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/bb4ec8182a674f9dcb5d5db8ddf0baf5/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+32
+33    <application
+33-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:13:5-86:19
+34        android:name="com.moneymanager.app.MoneyManagerApp"
+34-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:14:9-40
+35        android:allowBackup="true"
+35-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:15:9-35
+36        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+36-->[androidx.core:core:1.13.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/bb4ec8182a674f9dcb5d5db8ddf0baf5/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+37        android:debuggable="true"
+38        android:extractNativeLibs="false"
+39        android:icon="@mipmap/ic_launcher"
+39-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:16:9-43
+40        android:label="@string/app_name"
+40-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:17:9-41
+41        android:roundIcon="@mipmap/ic_launcher_round"
+41-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:18:9-54
+42        android:supportsRtl="true"
+42-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:19:9-35
+43        android:testOnly="true"
+44        android:theme="@style/Theme.MoneyManager" >
+44-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:20:9-50
+45        <activity
+45-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:22:9-75:20
+46            android:name="com.moneymanager.app.MainActivity"
+46-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:23:13-41
+47            android:exported="true"
+47-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:24:13-36
+48            android:launchMode="singleTask"
+48-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:25:13-44
+49            android:theme="@style/Theme.MoneyManager"
+49-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:27:13-54
+50            android:windowSoftInputMode="adjustResize" >
+50-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:26:13-55
+51            <intent-filter>
+51-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:29:13-32:29
+52                <action android:name="android.intent.action.MAIN" />
+52-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:30:17-69
+52-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:30:25-66
+53
+54                <category android:name="android.intent.category.LAUNCHER" />
+54-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:31:17-77
+54-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:31:27-74
+55            </intent-filter>
+56
+57            <!-- ═══ UPI Universal Deep Links ════════════════════════════════ -->
+58            <!-- Standard UPI intent — opens when any UPI QR/link is tapped -->
+59            <intent-filter>
+59-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:36:13-41:29
+60                <action android:name="android.intent.action.VIEW" />
+60-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:37:17-69
+60-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:37:25-66
+61
+62                <category android:name="android.intent.category.DEFAULT" />
+62-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:38:17-76
+62-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:38:27-73
+63                <category android:name="android.intent.category.BROWSABLE" />
+63-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:39:17-78
+63-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:39:27-75
+64
+65                <data
+65-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:17-65
+66                    android:host="pay"
+66-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:44-62
+67                    android:scheme="upi" />
+67-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:23-43
+68            </intent-filter>
+69
+70            <!-- ═══ App Links (HTTPS Deep Links) ════════════════════════════ -->
+71            <!-- moneymanager.web.app/pay?pa=upi@id&pn=Name&am=500 -->
+72            <intent-filter android:autoVerify="true" >
+72-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:45:13-53:29
+72-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:45:28-53
+73                <action android:name="android.intent.action.VIEW" />
+73-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:37:17-69
+73-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:37:25-66
+74
+75                <category android:name="android.intent.category.DEFAULT" />
+75-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:38:17-76
+75-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:38:27-73
+76                <category android:name="android.intent.category.BROWSABLE" />
+76-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:39:17-78
+76-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:39:27-75
+77
+78                <data
+78-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:17-65
+79                    android:host="moneymanager.web.app"
+79-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:44-62
+80                    android:pathPrefix="/pay"
+80-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:52:21-46
+81                    android:scheme="https" />
+81-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:23-43
+82            </intent-filter>
+83            <intent-filter android:autoVerify="true" >
+83-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:55:13-63:29
+83-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:55:28-53
+84                <action android:name="android.intent.action.VIEW" />
+84-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:37:17-69
+84-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:37:25-66
+85
+86                <category android:name="android.intent.category.DEFAULT" />
+86-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:38:17-76
+86-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:38:27-73
+87                <category android:name="android.intent.category.BROWSABLE" />
+87-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:39:17-78
+87-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:39:27-75
+88
+89                <data
+89-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:17-65
+90                    android:host="moneymanager.web.app"
+90-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:44-62
+91                    android:pathPrefix="/contact"
+91-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:52:21-46
+92                    android:scheme="https" />
+92-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:23-43
+93            </intent-filter>
+94            <intent-filter android:autoVerify="true" >
+94-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:65:13-73:29
+94-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:65:28-53
+95                <action android:name="android.intent.action.VIEW" />
+95-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:37:17-69
+95-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:37:25-66
+96
+97                <category android:name="android.intent.category.DEFAULT" />
+97-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:38:17-76
+97-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:38:27-73
+98                <category android:name="android.intent.category.BROWSABLE" />
+98-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:39:17-78
+98-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:39:27-75
+99
+100                <data
+100-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:17-65
+101                    android:host="moneymanager.web.app"
+101-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:44-62
+102                    android:pathPrefix="/split"
+102-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:52:21-46
+103                    android:scheme="https" />
+103-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:23-43
+104            </intent-filter>
+105        </activity>
+106
+107        <!-- Firebase Cloud Messaging -->
+108        <service
+108-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:78:9-84:19
+109            android:name="com.moneymanager.app.data.FCMService"
+109-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:79:13-44
+110            android:exported="false" >
+110-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:80:13-37
+111            <intent-filter>
+111-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:81:13-83:29
+112                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+112-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:82:17-78
+112-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:82:25-75
+113            </intent-filter>
+114        </service>
+115        <service
+115-->[com.google.firebase:firebase-auth-ktx:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/7917168b21bb70510f79fa8743b49f04/transformed/firebase-auth-ktx-23.0.0/AndroidManifest.xml:8:9-14:19
+116            android:name="com.google.firebase.components.ComponentDiscoveryService"
+116-->[com.google.firebase:firebase-auth-ktx:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/7917168b21bb70510f79fa8743b49f04/transformed/firebase-auth-ktx-23.0.0/AndroidManifest.xml:9:13-84
+117            android:directBootAware="true"
+117-->[com.google.firebase:firebase-common:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6956edf45553753bdf5081cdbc04ad8f/transformed/firebase-common-21.0.0/AndroidManifest.xml:32:13-43
+118            android:exported="false" >
+118-->[com.google.firebase:firebase-auth-ktx:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/7917168b21bb70510f79fa8743b49f04/transformed/firebase-auth-ktx-23.0.0/AndroidManifest.xml:10:13-37
+119            <meta-data
+119-->[com.google.firebase:firebase-auth-ktx:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/7917168b21bb70510f79fa8743b49f04/transformed/firebase-auth-ktx-23.0.0/AndroidManifest.xml:11:13-13:85
+120                android:name="com.google.firebase.components:com.google.firebase.auth.ktx.FirebaseAuthLegacyRegistrar"
+120-->[com.google.firebase:firebase-auth-ktx:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/7917168b21bb70510f79fa8743b49f04/transformed/firebase-auth-ktx-23.0.0/AndroidManifest.xml:12:17-119
+121                android:value="com.google.firebase.components.ComponentRegistrar" />
+121-->[com.google.firebase:firebase-auth-ktx:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/7917168b21bb70510f79fa8743b49f04/transformed/firebase-auth-ktx-23.0.0/AndroidManifest.xml:13:17-82
+122            <meta-data
+122-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:69:13-71:85
+123                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
+123-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:70:17-109
+124                android:value="com.google.firebase.components.ComponentRegistrar" />
+124-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:71:17-82
+125            <meta-data
+125-->[com.google.firebase:firebase-storage-ktx:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/adfaceb9e41b9475c7780c39ff8c5b9b/transformed/firebase-storage-ktx-21.0.0/AndroidManifest.xml:12:13-14:85
+126                android:name="com.google.firebase.components:com.google.firebase.storage.ktx.FirebaseStorageLegacyRegistrar"
+126-->[com.google.firebase:firebase-storage-ktx:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/adfaceb9e41b9475c7780c39ff8c5b9b/transformed/firebase-storage-ktx-21.0.0/AndroidManifest.xml:13:17-125
+127                android:value="com.google.firebase.components.ComponentRegistrar" />
+127-->[com.google.firebase:firebase-storage-ktx:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/adfaceb9e41b9475c7780c39ff8c5b9b/transformed/firebase-storage-ktx-21.0.0/AndroidManifest.xml:14:17-82
+128            <meta-data
+128-->[com.google.firebase:firebase-firestore-ktx:25.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/af6ad7e0199fa8d355e7d6f405aaef4e/transformed/firebase-firestore-ktx-25.0.0/AndroidManifest.xml:12:13-14:85
+129                android:name="com.google.firebase.components:com.google.firebase.firestore.ktx.FirebaseFirestoreLegacyRegistrar"
+129-->[com.google.firebase:firebase-firestore-ktx:25.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/af6ad7e0199fa8d355e7d6f405aaef4e/transformed/firebase-firestore-ktx-25.0.0/AndroidManifest.xml:13:17-129
+130                android:value="com.google.firebase.components.ComponentRegistrar" />
+130-->[com.google.firebase:firebase-firestore-ktx:25.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/af6ad7e0199fa8d355e7d6f405aaef4e/transformed/firebase-firestore-ktx-25.0.0/AndroidManifest.xml:14:17-82
+131            <meta-data
+131-->[com.google.firebase:firebase-messaging-ktx:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/70682b086dba30357b7809168cd1d112/transformed/firebase-messaging-ktx-24.0.0/AndroidManifest.xml:26:13-28:85
+132                android:name="com.google.firebase.components:com.google.firebase.messaging.ktx.FirebaseMessagingLegacyRegistrar"
+132-->[com.google.firebase:firebase-messaging-ktx:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/70682b086dba30357b7809168cd1d112/transformed/firebase-messaging-ktx-24.0.0/AndroidManifest.xml:27:17-129
+133                android:value="com.google.firebase.components.ComponentRegistrar" />
+133-->[com.google.firebase:firebase-messaging-ktx:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/70682b086dba30357b7809168cd1d112/transformed/firebase-messaging-ktx-24.0.0/AndroidManifest.xml:28:17-82
+134            <meta-data
+134-->[com.google.firebase:firebase-storage:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/f0a707b5d86cd97dbb0df0b1c975b527/transformed/firebase-storage-21.0.0/AndroidManifest.xml:30:13-32:85
+135                android:name="com.google.firebase.components:com.google.firebase.storage.FirebaseStorageKtxRegistrar"
+135-->[com.google.firebase:firebase-storage:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/f0a707b5d86cd97dbb0df0b1c975b527/transformed/firebase-storage-21.0.0/AndroidManifest.xml:31:17-118
+136                android:value="com.google.firebase.components.ComponentRegistrar" />
+136-->[com.google.firebase:firebase-storage:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/f0a707b5d86cd97dbb0df0b1c975b527/transformed/firebase-storage-21.0.0/AndroidManifest.xml:32:17-82
+137            <meta-data
+137-->[com.google.firebase:firebase-storage:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/f0a707b5d86cd97dbb0df0b1c975b527/transformed/firebase-storage-21.0.0/AndroidManifest.xml:33:13-35:85
+138                android:name="com.google.firebase.components:com.google.firebase.storage.StorageRegistrar"
+138-->[com.google.firebase:firebase-storage:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/f0a707b5d86cd97dbb0df0b1c975b527/transformed/firebase-storage-21.0.0/AndroidManifest.xml:34:17-107
+139                android:value="com.google.firebase.components.ComponentRegistrar" />
+139-->[com.google.firebase:firebase-storage:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/f0a707b5d86cd97dbb0df0b1c975b527/transformed/firebase-storage-21.0.0/AndroidManifest.xml:35:17-82
+140            <meta-data
+140-->[com.google.firebase:firebase-firestore:25.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/4f5f67435bcca1f39113c4cb2c5c4104/transformed/firebase-firestore-25.0.0/AndroidManifest.xml:17:13-19:85
+141                android:name="com.google.firebase.components:com.google.firebase.firestore.FirebaseFirestoreKtxRegistrar"
+141-->[com.google.firebase:firebase-firestore:25.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/4f5f67435bcca1f39113c4cb2c5c4104/transformed/firebase-firestore-25.0.0/AndroidManifest.xml:18:17-122
+142                android:value="com.google.firebase.components.ComponentRegistrar" />
+142-->[com.google.firebase:firebase-firestore:25.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/4f5f67435bcca1f39113c4cb2c5c4104/transformed/firebase-firestore-25.0.0/AndroidManifest.xml:19:17-82
+143            <meta-data
+143-->[com.google.firebase:firebase-firestore:25.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/4f5f67435bcca1f39113c4cb2c5c4104/transformed/firebase-firestore-25.0.0/AndroidManifest.xml:20:13-22:85
+144                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+144-->[com.google.firebase:firebase-firestore:25.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/4f5f67435bcca1f39113c4cb2c5c4104/transformed/firebase-firestore-25.0.0/AndroidManifest.xml:21:17-111
+145                android:value="com.google.firebase.components.ComponentRegistrar" />
+145-->[com.google.firebase:firebase-firestore:25.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/4f5f67435bcca1f39113c4cb2c5c4104/transformed/firebase-firestore-25.0.0/AndroidManifest.xml:22:17-82
+146            <meta-data
+146-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:57:13-59:85
+147                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingKtxRegistrar"
+147-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:58:17-122
+148                android:value="com.google.firebase.components.ComponentRegistrar" />
+148-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:59:17-82
+149            <meta-data
+149-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:60:13-62:85
+150                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+150-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:61:17-119
+151                android:value="com.google.firebase.components.ComponentRegistrar" />
+151-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:62:17-82
+152            <meta-data
+152-->[com.google.firebase:firebase-appcheck:18.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/0fb67eb925b5fc416a520ac04ec144ba/transformed/firebase-appcheck-18.0.0/AndroidManifest.xml:25:13-27:85
+153                android:name="com.google.firebase.components:com.google.firebase.appcheck.FirebaseAppCheckKtxRegistrar"
+153-->[com.google.firebase:firebase-appcheck:18.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/0fb67eb925b5fc416a520ac04ec144ba/transformed/firebase-appcheck-18.0.0/AndroidManifest.xml:26:17-120
+154                android:value="com.google.firebase.components.ComponentRegistrar" />
+154-->[com.google.firebase:firebase-appcheck:18.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/0fb67eb925b5fc416a520ac04ec144ba/transformed/firebase-appcheck-18.0.0/AndroidManifest.xml:27:17-82
+155            <meta-data
+155-->[com.google.firebase:firebase-appcheck:18.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/0fb67eb925b5fc416a520ac04ec144ba/transformed/firebase-appcheck-18.0.0/AndroidManifest.xml:28:13-30:85
+156                android:name="com.google.firebase.components:com.google.firebase.appcheck.FirebaseAppCheckRegistrar"
+156-->[com.google.firebase:firebase-appcheck:18.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/0fb67eb925b5fc416a520ac04ec144ba/transformed/firebase-appcheck-18.0.0/AndroidManifest.xml:29:17-117
+157                android:value="com.google.firebase.components.ComponentRegistrar" />
+157-->[com.google.firebase:firebase-appcheck:18.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/0fb67eb925b5fc416a520ac04ec144ba/transformed/firebase-appcheck-18.0.0/AndroidManifest.xml:30:17-82
+158            <meta-data
+158-->[com.google.firebase:firebase-installations:18.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6f0b87a5c4aeeb1c82240b8914179adb/transformed/firebase-installations-18.0.0/AndroidManifest.xml:15:13-17:85
+159                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsKtxRegistrar"
+159-->[com.google.firebase:firebase-installations:18.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6f0b87a5c4aeeb1c82240b8914179adb/transformed/firebase-installations-18.0.0/AndroidManifest.xml:16:17-130
+160                android:value="com.google.firebase.components.ComponentRegistrar" />
+160-->[com.google.firebase:firebase-installations:18.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6f0b87a5c4aeeb1c82240b8914179adb/transformed/firebase-installations-18.0.0/AndroidManifest.xml:17:17-82
+161            <meta-data
+161-->[com.google.firebase:firebase-installations:18.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6f0b87a5c4aeeb1c82240b8914179adb/transformed/firebase-installations-18.0.0/AndroidManifest.xml:18:13-20:85
+162                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+162-->[com.google.firebase:firebase-installations:18.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6f0b87a5c4aeeb1c82240b8914179adb/transformed/firebase-installations-18.0.0/AndroidManifest.xml:19:17-127
+163                android:value="com.google.firebase.components.ComponentRegistrar" />
+163-->[com.google.firebase:firebase-installations:18.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6f0b87a5c4aeeb1c82240b8914179adb/transformed/firebase-installations-18.0.0/AndroidManifest.xml:20:17-82
+164            <meta-data
+164-->[com.google.firebase:firebase-common-ktx:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9ea02ebaf4e587a76788f1cd1d07a255/transformed/firebase-common-ktx-21.0.0/AndroidManifest.xml:12:13-14:85
+165                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar"
+165-->[com.google.firebase:firebase-common-ktx:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9ea02ebaf4e587a76788f1cd1d07a255/transformed/firebase-common-ktx-21.0.0/AndroidManifest.xml:13:17-116
+166                android:value="com.google.firebase.components.ComponentRegistrar" />
+166-->[com.google.firebase:firebase-common-ktx:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9ea02ebaf4e587a76788f1cd1d07a255/transformed/firebase-common-ktx-21.0.0/AndroidManifest.xml:14:17-82
+167            <meta-data
+167-->[com.google.firebase:firebase-common:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6956edf45553753bdf5081cdbc04ad8f/transformed/firebase-common-21.0.0/AndroidManifest.xml:35:13-37:85
+168                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+168-->[com.google.firebase:firebase-common:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6956edf45553753bdf5081cdbc04ad8f/transformed/firebase-common-21.0.0/AndroidManifest.xml:36:17-109
+169                android:value="com.google.firebase.components.ComponentRegistrar" />
+169-->[com.google.firebase:firebase-common:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6956edf45553753bdf5081cdbc04ad8f/transformed/firebase-common-21.0.0/AndroidManifest.xml:37:17-82
+170            <meta-data
+170-->[com.google.firebase:firebase-datatransport:18.2.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/132f73ec828f268ba30723772b445cc5/transformed/firebase-datatransport-18.2.0/AndroidManifest.xml:25:13-27:85
+171                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+171-->[com.google.firebase:firebase-datatransport:18.2.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/132f73ec828f268ba30723772b445cc5/transformed/firebase-datatransport-18.2.0/AndroidManifest.xml:26:17-115
+172                android:value="com.google.firebase.components.ComponentRegistrar" />
+172-->[com.google.firebase:firebase-datatransport:18.2.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/132f73ec828f268ba30723772b445cc5/transformed/firebase-datatransport-18.2.0/AndroidManifest.xml:27:17-82
+173        </service>
+174
+175        <activity
+175-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:29:9-46:20
+176            android:name="com.google.firebase.auth.internal.GenericIdpActivity"
+176-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:30:13-80
+177            android:excludeFromRecents="true"
+177-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:31:13-46
+178            android:exported="true"
+178-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:32:13-36
+179            android:launchMode="singleTask"
+179-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:33:13-44
+180            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+180-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:34:13-72
+181            <intent-filter>
+181-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:35:13-45:29
+182                <action android:name="android.intent.action.VIEW" />
+182-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:37:17-69
+182-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:37:25-66
+183
+184                <category android:name="android.intent.category.DEFAULT" />
+184-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:38:17-76
+184-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:38:27-73
+185                <category android:name="android.intent.category.BROWSABLE" />
+185-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:39:17-78
+185-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:39:27-75
+186
+187                <data
+187-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:17-65
+188                    android:host="firebase.auth"
+188-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:44-62
+189                    android:path="/"
+190                    android:scheme="genericidp" />
+190-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:23-43
+191            </intent-filter>
+192        </activity>
+193        <activity
+193-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:47:9-64:20
+194            android:name="com.google.firebase.auth.internal.RecaptchaActivity"
+194-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:48:13-79
+195            android:excludeFromRecents="true"
+195-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:49:13-46
+196            android:exported="true"
+196-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:50:13-36
+197            android:launchMode="singleTask"
+197-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:51:13-44
+198            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+198-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:52:13-72
+199            <intent-filter>
+199-->[com.google.firebase:firebase-auth:23.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/9d8c79c11c971c9dce8bb8d04c00a0d2/transformed/firebase-auth-23.0.0/AndroidManifest.xml:53:13-63:29
+200                <action android:name="android.intent.action.VIEW" />
+200-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:37:17-69
+200-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:37:25-66
+201
+202                <category android:name="android.intent.category.DEFAULT" />
+202-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:38:17-76
+202-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:38:27-73
+203                <category android:name="android.intent.category.BROWSABLE" />
+203-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:39:17-78
+203-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:39:27-75
+204
+205                <data
+205-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:17-65
+206                    android:host="firebase.auth"
+206-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:44-62
+207                    android:path="/"
+208                    android:scheme="recaptcha" />
+208-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:40:23-43
+209            </intent-filter>
+210        </activity>
+211
+212        <receiver
+212-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:29:9-40:20
+213            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+213-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:30:13-78
+214            android:exported="true"
+214-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:31:13-36
+215            android:permission="com.google.android.c2dm.permission.SEND" >
+215-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:32:13-73
+216            <intent-filter>
+216-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:33:13-35:29
+217                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+217-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:34:17-81
+217-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:34:25-78
+218            </intent-filter>
+219
+220            <meta-data
+220-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:37:13-39:40
+221                android:name="com.google.android.gms.cloudmessaging.FINISHED_AFTER_HANDLED"
+221-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:38:17-92
+222                android:value="true" />
+222-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:39:17-37
+223        </receiver>
+224        <!--
+225             FirebaseMessagingService performs security checks at runtime,
+226             but set to not exported to explicitly avoid allowing another app to call it.
+227        -->
+228        <service
+228-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:46:9-53:19
+229            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+229-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:47:13-82
+230            android:directBootAware="true"
+230-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:48:13-43
+231            android:exported="false" >
+231-->[com.google.firebase:firebase-messaging:24.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/e5de4dd6357718ebeb0e234b747e1a2f/transformed/firebase-messaging-24.0.0/AndroidManifest.xml:49:13-37
+232            <intent-filter android:priority="-500" >
+232-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:81:13-83:29
+233                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+233-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:82:17-78
+233-->/Users/karankumar/Documents/Projects/MoneyManager/MoneyManagerAndroid/app/src/main/AndroidManifest.xml:82:25-75
+234            </intent-filter>
+235        </service>
+236
+237        <provider
+237-->[com.google.firebase:firebase-common:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6956edf45553753bdf5081cdbc04ad8f/transformed/firebase-common-21.0.0/AndroidManifest.xml:23:9-28:39
+238            android:name="com.google.firebase.provider.FirebaseInitProvider"
+238-->[com.google.firebase:firebase-common:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6956edf45553753bdf5081cdbc04ad8f/transformed/firebase-common-21.0.0/AndroidManifest.xml:24:13-77
+239            android:authorities="com.moneymanager.app.firebaseinitprovider"
+239-->[com.google.firebase:firebase-common:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6956edf45553753bdf5081cdbc04ad8f/transformed/firebase-common-21.0.0/AndroidManifest.xml:25:13-72
+240            android:directBootAware="true"
+240-->[com.google.firebase:firebase-common:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6956edf45553753bdf5081cdbc04ad8f/transformed/firebase-common-21.0.0/AndroidManifest.xml:26:13-43
+241            android:exported="false"
+241-->[com.google.firebase:firebase-common:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6956edf45553753bdf5081cdbc04ad8f/transformed/firebase-common-21.0.0/AndroidManifest.xml:27:13-37
+242            android:initOrder="100" />
+242-->[com.google.firebase:firebase-common:21.0.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6956edf45553753bdf5081cdbc04ad8f/transformed/firebase-common-21.0.0/AndroidManifest.xml:28:13-36
+243
+244        <service
+244-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:24:9-32:19
+245            android:name="androidx.credentials.playservices.CredentialProviderMetadataHolder"
+245-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:25:13-94
+246            android:enabled="true"
+246-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:26:13-35
+247            android:exported="false" >
+247-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:27:13-37
+248            <meta-data
+248-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:29:13-31:104
+249                android:name="androidx.credentials.CREDENTIAL_PROVIDER_KEY"
+249-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:30:17-76
+250                android:value="androidx.credentials.playservices.CredentialProviderPlayServicesImpl" />
+250-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:31:17-101
+251        </service>
+252
+253        <activity
+253-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:34:9-41:20
+254            android:name="androidx.credentials.playservices.HiddenActivity"
+254-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:35:13-76
+255            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+255-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:36:13-87
+256            android:enabled="true"
+256-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:37:13-35
+257            android:exported="false"
+257-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:38:13-37
+258            android:fitsSystemWindows="true"
+258-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:39:13-45
+259            android:theme="@style/Theme.Hidden" >
+259-->[androidx.credentials:credentials-play-services-auth:1.2.0-rc01] /Users/karankumar/.gradle/caches/9.0.0/transforms/9a5edd730118c6590e4e0364cf3935da/transformed/credentials-play-services-auth-1.2.0-rc01/AndroidManifest.xml:40:13-48
+260        </activity>
+261        <activity
+261-->[com.google.android.gms:play-services-auth:20.7.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/56927385ae3ca184c14b5b5c8336ed9c/transformed/play-services-auth-20.7.0/AndroidManifest.xml:23:9-27:75
+262            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+262-->[com.google.android.gms:play-services-auth:20.7.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/56927385ae3ca184c14b5b5c8336ed9c/transformed/play-services-auth-20.7.0/AndroidManifest.xml:24:13-93
+263            android:excludeFromRecents="true"
+263-->[com.google.android.gms:play-services-auth:20.7.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/56927385ae3ca184c14b5b5c8336ed9c/transformed/play-services-auth-20.7.0/AndroidManifest.xml:25:13-46
+264            android:exported="false"
+264-->[com.google.android.gms:play-services-auth:20.7.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/56927385ae3ca184c14b5b5c8336ed9c/transformed/play-services-auth-20.7.0/AndroidManifest.xml:26:13-37
+265            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+265-->[com.google.android.gms:play-services-auth:20.7.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/56927385ae3ca184c14b5b5c8336ed9c/transformed/play-services-auth-20.7.0/AndroidManifest.xml:27:13-72
+266        <!--
+267            Service handling Google Sign-In user revocation. For apps that do not integrate with
+268            Google Sign-In, this service will never be started.
+269        -->
+270        <service
+270-->[com.google.android.gms:play-services-auth:20.7.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/56927385ae3ca184c14b5b5c8336ed9c/transformed/play-services-auth-20.7.0/AndroidManifest.xml:33:9-37:51
+271            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+271-->[com.google.android.gms:play-services-auth:20.7.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/56927385ae3ca184c14b5b5c8336ed9c/transformed/play-services-auth-20.7.0/AndroidManifest.xml:34:13-89
+272            android:exported="true"
+272-->[com.google.android.gms:play-services-auth:20.7.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/56927385ae3ca184c14b5b5c8336ed9c/transformed/play-services-auth-20.7.0/AndroidManifest.xml:35:13-36
+273            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+273-->[com.google.android.gms:play-services-auth:20.7.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/56927385ae3ca184c14b5b5c8336ed9c/transformed/play-services-auth-20.7.0/AndroidManifest.xml:36:13-107
+274            android:visibleToInstantApps="true" />
+274-->[com.google.android.gms:play-services-auth:20.7.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/56927385ae3ca184c14b5b5c8336ed9c/transformed/play-services-auth-20.7.0/AndroidManifest.xml:37:13-48
+275
+276        <activity
+276-->[com.google.android.gms:play-services-base:18.1.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/1d05d9e2a2ff1bea6a489eec3e81a931/transformed/play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
+277            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+277-->[com.google.android.gms:play-services-base:18.1.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/1d05d9e2a2ff1bea6a489eec3e81a931/transformed/play-services-base-18.1.0/AndroidManifest.xml:20:19-85
+278            android:exported="false"
+278-->[com.google.android.gms:play-services-base:18.1.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/1d05d9e2a2ff1bea6a489eec3e81a931/transformed/play-services-base-18.1.0/AndroidManifest.xml:22:19-43
+279            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+279-->[com.google.android.gms:play-services-base:18.1.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/1d05d9e2a2ff1bea6a489eec3e81a931/transformed/play-services-base-18.1.0/AndroidManifest.xml:21:19-78
+280
+281        <meta-data
+281-->[com.google.android.gms:play-services-basement:18.3.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6b50aebcfd54524a029d0af4de413b72/transformed/play-services-basement-18.3.0/AndroidManifest.xml:21:9-23:69
+282            android:name="com.google.android.gms.version"
+282-->[com.google.android.gms:play-services-basement:18.3.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6b50aebcfd54524a029d0af4de413b72/transformed/play-services-basement-18.3.0/AndroidManifest.xml:22:13-58
+283            android:value="@integer/google_play_services_version" />
+283-->[com.google.android.gms:play-services-basement:18.3.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/6b50aebcfd54524a029d0af4de413b72/transformed/play-services-basement-18.3.0/AndroidManifest.xml:23:13-66
+284
+285        <provider
+285-->[androidx.emoji2:emoji2:1.3.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/95c4d6210c8af266eb53b99955ff2913/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+286            android:name="androidx.startup.InitializationProvider"
+286-->[androidx.emoji2:emoji2:1.3.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/95c4d6210c8af266eb53b99955ff2913/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+287            android:authorities="com.moneymanager.app.androidx-startup"
+287-->[androidx.emoji2:emoji2:1.3.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/95c4d6210c8af266eb53b99955ff2913/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+288            android:exported="false" >
+288-->[androidx.emoji2:emoji2:1.3.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/95c4d6210c8af266eb53b99955ff2913/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+289            <meta-data
+289-->[androidx.emoji2:emoji2:1.3.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/95c4d6210c8af266eb53b99955ff2913/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+290                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+290-->[androidx.emoji2:emoji2:1.3.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/95c4d6210c8af266eb53b99955ff2913/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+291                android:value="androidx.startup" />
+291-->[androidx.emoji2:emoji2:1.3.0] /Users/karankumar/.gradle/caches/9.0.0/transforms/95c4d6210c8af266eb53b99955ff2913/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+292            <meta-data
+292-->[androidx.lifecycle:lifecycle-process:2.8.3] /Users/karankumar/.gradle/caches/9.0.0/transforms/d237202de0b5f89cd893fa4cf501db07/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:29:13-31:52
+293                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+293-->[androidx.lifecycle:lifecycle-process:2.8.3] /Users/karankumar/.gradle/caches/9.0.0/transforms/d237202de0b5f89cd893fa4cf501db07/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:30:17-78
+294                android:value="androidx.startup" />
+294-->[androidx.lifecycle:lifecycle-process:2.8.3] /Users/karankumar/.gradle/caches/9.0.0/transforms/d237202de0b5f89cd893fa4cf501db07/transformed/lifecycle-process-2.8.3/AndroidManifest.xml:31:17-49
+295            <meta-data
+295-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+296                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+296-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+297                android:value="androidx.startup" />
+297-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+298        </provider>
+299
+300        <activity
+300-->[androidx.compose.ui:ui-tooling-android:1.6.8] /Users/karankumar/.gradle/caches/9.0.0/transforms/e6912295c68eda4c95f84c114ccfcfca/transformed/ui-tooling-release/AndroidManifest.xml:23:9-25:39
+301            android:name="androidx.compose.ui.tooling.PreviewActivity"
+301-->[androidx.compose.ui:ui-tooling-android:1.6.8] /Users/karankumar/.gradle/caches/9.0.0/transforms/e6912295c68eda4c95f84c114ccfcfca/transformed/ui-tooling-release/AndroidManifest.xml:24:13-71
+302            android:exported="true" />
+302-->[androidx.compose.ui:ui-tooling-android:1.6.8] /Users/karankumar/.gradle/caches/9.0.0/transforms/e6912295c68eda4c95f84c114ccfcfca/transformed/ui-tooling-release/AndroidManifest.xml:25:13-36
+303
+304        <receiver
+304-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+305            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+305-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+306            android:directBootAware="false"
+306-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+307            android:enabled="true"
+307-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+308            android:exported="true"
+308-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+309            android:permission="android.permission.DUMP" >
+309-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+310            <intent-filter>
+310-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+311                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+311-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+311-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+312            </intent-filter>
+313            <intent-filter>
+313-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+314                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+314-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+314-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+315            </intent-filter>
+316            <intent-filter>
+316-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+317                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+317-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+317-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+318            </intent-filter>
+319            <intent-filter>
+319-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+320                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+320-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+320-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/karankumar/.gradle/caches/9.0.0/transforms/a8accb8c3188fb1eb5e25fee91705538/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+321            </intent-filter>
+322        </receiver>
+323
+324        <service
+324-->[com.google.android.datatransport:transport-backend-cct:3.1.9] /Users/karankumar/.gradle/caches/9.0.0/transforms/b99f623e4ee3b80d52834598240cae0d/transformed/transport-backend-cct-3.1.9/AndroidManifest.xml:28:9-34:19
+325            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+325-->[com.google.android.datatransport:transport-backend-cct:3.1.9] /Users/karankumar/.gradle/caches/9.0.0/transforms/b99f623e4ee3b80d52834598240cae0d/transformed/transport-backend-cct-3.1.9/AndroidManifest.xml:29:13-103
+326            android:exported="false" >
+326-->[com.google.android.datatransport:transport-backend-cct:3.1.9] /Users/karankumar/.gradle/caches/9.0.0/transforms/b99f623e4ee3b80d52834598240cae0d/transformed/transport-backend-cct-3.1.9/AndroidManifest.xml:30:13-37
+327            <meta-data
+327-->[com.google.android.datatransport:transport-backend-cct:3.1.9] /Users/karankumar/.gradle/caches/9.0.0/transforms/b99f623e4ee3b80d52834598240cae0d/transformed/transport-backend-cct-3.1.9/AndroidManifest.xml:31:13-33:39
+328                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+328-->[com.google.android.datatransport:transport-backend-cct:3.1.9] /Users/karankumar/.gradle/caches/9.0.0/transforms/b99f623e4ee3b80d52834598240cae0d/transformed/transport-backend-cct-3.1.9/AndroidManifest.xml:32:17-94
+329                android:value="cct" />
+329-->[com.google.android.datatransport:transport-backend-cct:3.1.9] /Users/karankumar/.gradle/caches/9.0.0/transforms/b99f623e4ee3b80d52834598240cae0d/transformed/transport-backend-cct-3.1.9/AndroidManifest.xml:33:17-36
+330        </service>
+331        <service
+331-->[com.google.android.datatransport:transport-runtime:3.1.9] /Users/karankumar/.gradle/caches/9.0.0/transforms/bebf9e7051c83dc45d66d19cfdb0e77b/transformed/transport-runtime-3.1.9/AndroidManifest.xml:26:9-30:19
+332            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+332-->[com.google.android.datatransport:transport-runtime:3.1.9] /Users/karankumar/.gradle/caches/9.0.0/transforms/bebf9e7051c83dc45d66d19cfdb0e77b/transformed/transport-runtime-3.1.9/AndroidManifest.xml:27:13-117
+333            android:exported="false"
+333-->[com.google.android.datatransport:transport-runtime:3.1.9] /Users/karankumar/.gradle/caches/9.0.0/transforms/bebf9e7051c83dc45d66d19cfdb0e77b/transformed/transport-runtime-3.1.9/AndroidManifest.xml:28:13-37
+334            android:permission="android.permission.BIND_JOB_SERVICE" >
+334-->[com.google.android.datatransport:transport-runtime:3.1.9] /Users/karankumar/.gradle/caches/9.0.0/transforms/bebf9e7051c83dc45d66d19cfdb0e77b/transformed/transport-runtime-3.1.9/AndroidManifest.xml:29:13-69
+335        </service>
+336
+337        <receiver
+337-->[com.google.android.datatransport:transport-runtime:3.1.9] /Users/karankumar/.gradle/caches/9.0.0/transforms/bebf9e7051c83dc45d66d19cfdb0e77b/transformed/transport-runtime-3.1.9/AndroidManifest.xml:32:9-34:40
+338            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+338-->[com.google.android.datatransport:transport-runtime:3.1.9] /Users/karankumar/.gradle/caches/9.0.0/transforms/bebf9e7051c83dc45d66d19cfdb0e77b/transformed/transport-runtime-3.1.9/AndroidManifest.xml:33:13-132
+339            android:exported="false" />
+339-->[com.google.android.datatransport:transport-runtime:3.1.9] /Users/karankumar/.gradle/caches/9.0.0/transforms/bebf9e7051c83dc45d66d19cfdb0e77b/transformed/transport-runtime-3.1.9/AndroidManifest.xml:34:13-37
+340    </application>
+341
+342</manifest>

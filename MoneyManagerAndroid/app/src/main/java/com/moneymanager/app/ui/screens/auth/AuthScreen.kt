@@ -24,8 +24,6 @@ import com.google.android.gms.auth.api.signin.*
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.*
 import com.moneymanager.app.ui.theme.*
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.tasks.await
 
 @Composable
 fun AuthScreen(onAuthSuccess: () -> Unit) {
@@ -41,7 +39,7 @@ fun AuthScreen(onAuthSuccess: () -> Unit) {
     val infiniteAnim = rememberInfiniteTransition(label = "pulse")
     val pulse by infiniteAnim.animateFloat(
         initialValue = 0.6f, targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(1200, easing = EaseInOutQuad), RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(tween(1200, easing = FastOutSlowInEasing), RepeatMode.Reverse),
         label = "pulse"
     )
 

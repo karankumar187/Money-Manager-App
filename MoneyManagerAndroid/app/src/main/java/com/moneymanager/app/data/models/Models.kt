@@ -160,23 +160,26 @@ fun Transaction.toFirestoreMap(): Map<String, Any?> = mapOf(
     "splitGroupId" to splitGroupId
 )
 
-fun Map<String, Any?>.toTransaction(): Transaction? = try {
-    Transaction(
-        id = get("id") as? String ?: return null,
-        amount = (get("amount") as? Number)?.toDouble() ?: 0.0,
-        recipientName = get("recipientName") as? String ?: "",
-        upiId = get("upiId") as? String ?: "",
-        note = get("note") as? String ?: "",
-        categoryId = get("categoryId") as? String ?: "",
-        categoryName = get("categoryName") as? String ?: "",
-        categoryEmoji = get("categoryEmoji") as? String ?: "",
-        categoryHex = get("categoryHex") as? String ?: "#FF9F0A",
-        date = (get("date") as? Timestamp)?.toDate() ?: Date(),
-        upiAppUsed = get("upiAppUsed") as? String,
-        linkedLendId = get("linkedLendId") as? String,
-        splitGroupId = get("splitGroupId") as? String
-    )
-} catch (e: Exception) { null }
+fun Map<String, Any?>.toTransaction(): Transaction? {
+    return try {
+        val id = get("id") as? String ?: return null
+        Transaction(
+            id = id,
+            amount = (get("amount") as? Number)?.toDouble() ?: 0.0,
+            recipientName = get("recipientName") as? String ?: "",
+            upiId = get("upiId") as? String ?: "",
+            note = get("note") as? String ?: "",
+            categoryId = get("categoryId") as? String ?: "",
+            categoryName = get("categoryName") as? String ?: "",
+            categoryEmoji = get("categoryEmoji") as? String ?: "",
+            categoryHex = get("categoryHex") as? String ?: "#FF9F0A",
+            date = (get("date") as? Timestamp)?.toDate() ?: Date(),
+            upiAppUsed = get("upiAppUsed") as? String,
+            linkedLendId = get("linkedLendId") as? String,
+            splitGroupId = get("splitGroupId") as? String
+        )
+    } catch (e: Exception) { null }
+}
 
 fun LendBorrow.toFirestoreMap(): Map<String, Any?> = mapOf(
     "id" to id, "type" to type.name, "personName" to personName,
@@ -187,48 +190,57 @@ fun LendBorrow.toFirestoreMap(): Map<String, Any?> = mapOf(
     "splitGroupId" to splitGroupId
 )
 
-fun Map<String, Any?>.toLendBorrow(): LendBorrow? = try {
-    LendBorrow(
-        id = get("id") as? String ?: return null,
-        type = LendBorrowType.valueOf(get("type") as? String ?: "LENT"),
-        personName = get("personName") as? String ?: "",
-        contactPhone = get("contactPhone") as? String,
-        amount = (get("amount") as? Number)?.toDouble() ?: 0.0,
-        paidAmount = (get("paidAmount") as? Number)?.toDouble() ?: 0.0,
-        note = get("note") as? String ?: "",
-        date = (get("date") as? Timestamp)?.toDate() ?: Date(),
-        dueDate = (get("dueDate") as? Timestamp)?.toDate(),
-        isPaid = get("isPaid") as? Boolean ?: false,
-        paidDate = (get("paidDate") as? Timestamp)?.toDate(),
-        splitGroupId = get("splitGroupId") as? String
-    )
-} catch (e: Exception) { null }
+fun Map<String, Any?>.toLendBorrow(): LendBorrow? {
+    return try {
+        val id = get("id") as? String ?: return null
+        LendBorrow(
+            id = id,
+            type = LendBorrowType.valueOf(get("type") as? String ?: "LENT"),
+            personName = get("personName") as? String ?: "",
+            contactPhone = get("contactPhone") as? String,
+            amount = (get("amount") as? Number)?.toDouble() ?: 0.0,
+            paidAmount = (get("paidAmount") as? Number)?.toDouble() ?: 0.0,
+            note = get("note") as? String ?: "",
+            date = (get("date") as? Timestamp)?.toDate() ?: Date(),
+            dueDate = (get("dueDate") as? Timestamp)?.toDate(),
+            isPaid = get("isPaid") as? Boolean ?: false,
+            paidDate = (get("paidDate") as? Timestamp)?.toDate(),
+            splitGroupId = get("splitGroupId") as? String
+        )
+    } catch (e: Exception) { null }
+}
 
-fun Map<String, Any?>.toSharedLedger(): SharedLedger? = try {
-    SharedLedger(
-        id = get("id") as? String ?: return null,
-        fromUID = get("fromUID") as? String ?: "",
-        toUID = get("toUID") as? String ?: "",
-        fromPhone = get("fromPhone") as? String ?: "",
-        toPhone = get("toPhone") as? String ?: "",
-        fromName = get("fromName") as? String ?: "",
-        toName = get("toName") as? String ?: "",
-        amount = (get("amount") as? Number)?.toDouble() ?: 0.0,
-        note = get("note") as? String ?: "",
-        groupName = get("groupName") as? String,
-        date = (get("date") as? Timestamp)?.toDate() ?: Date(),
-        isPaid = get("isPaid") as? Boolean ?: false,
-        paidDate = (get("paidDate") as? Timestamp)?.toDate()
-    )
-} catch (e: Exception) { null }
+fun Map<String, Any?>.toSharedLedger(): SharedLedger? {
+    return try {
+        val id = get("id") as? String ?: return null
+        SharedLedger(
+            id = id,
+            fromUID = get("fromUID") as? String ?: "",
+            toUID = get("toUID") as? String ?: "",
+            fromPhone = get("fromPhone") as? String ?: "",
+            toPhone = get("toPhone") as? String ?: "",
+            fromName = get("fromName") as? String ?: "",
+            toName = get("toName") as? String ?: "",
+            amount = (get("amount") as? Number)?.toDouble() ?: 0.0,
+            note = get("note") as? String ?: "",
+            groupName = get("groupName") as? String,
+            date = (get("date") as? Timestamp)?.toDate() ?: Date(),
+            isPaid = get("isPaid") as? Boolean ?: false,
+            paidDate = (get("paidDate") as? Timestamp)?.toDate()
+        )
+    } catch (e: Exception) { null }
+}
 
-fun Map<String, Any?>.toUserProfile(uid: String): UserProfile? = try {
-    UserProfile(
-        id = uid,
-        phone = get("phone") as? String ?: return null,
-        displayName = get("displayName") as? String ?: "",
-        upiId = get("upiId") as? String ?: "",
-        profileImageURL = get("profileImageURL") as? String,
-        createdAt = (get("createdAt") as? Timestamp)?.toDate() ?: Date()
-    )
-} catch (e: Exception) { null }
+fun Map<String, Any?>.toUserProfile(uid: String): UserProfile? {
+    return try {
+        val phone = get("phone") as? String ?: return null
+        UserProfile(
+            id = uid,
+            phone = phone,
+            displayName = get("displayName") as? String ?: "",
+            upiId = get("upiId") as? String ?: "",
+            profileImageURL = get("profileImageURL") as? String,
+            createdAt = (get("createdAt") as? Timestamp)?.toDate() ?: Date()
+        )
+    } catch (e: Exception) { null }
+}

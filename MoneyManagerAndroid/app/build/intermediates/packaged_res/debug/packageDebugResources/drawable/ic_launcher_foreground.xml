@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Adaptive icon foreground — ₹ symbol in Accent1 red (#FF3B30) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Red rounded circle background accent -->
+    <path
+        android:fillColor="#FF3B30"
+        android:pathData="M54,24 A30,30 0 1,1 53.99,24 Z" />
+
+    <!-- ₹ symbol drawn as paths (white) -->
+    <!-- Top horizontal bar -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M40,36 L68,36 Q70,36 70,38 Q70,40 68,40 L40,40 Q38,40 38,38 Q38,36 40,36 Z" />
+    <!-- Second horizontal bar -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M40,44 L68,44 Q70,44 70,46 Q70,48 68,48 L40,48 Q38,48 38,46 Q38,44 40,44 Z" />
+    <!-- Diagonal stroke (the Rs diagonal) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M46,48 L64,72 Q65,74 63,75 Q61,76 60,74 L42,50 Z" />
+    <!-- Vertical left bar -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M42,36 L46,36 L46,74 L42,74 Z" />
+</vector>
