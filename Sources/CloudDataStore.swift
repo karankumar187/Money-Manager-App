@@ -327,11 +327,11 @@ class CloudDataStore: ObservableObject {
     }
 
     // Split a bill: deducts your share and creates shared ledgers for each friend
-    func splitBill(totalAmount: Double, myShare: Double, note: String, groupName: String?, friends: [(name: String, phone: String, share: Double)]) {
+    func splitBill(totalAmount: Double, myShare: Double, note: String, groupName: String?, originalRecipient: String? = nil, friends: [(name: String, phone: String, share: Double)]) {
         // Log your own expense
         let defaultCat = categories.first ?? AppCategory.defaultCategories[0]
         let myTx = Transaction(
-            amount: myShare, recipientName: "Split Bill", upiId: "",
+            amount: myShare, recipientName: originalRecipient ?? "Split Bill", upiId: "",
             note: note, categoryId: defaultCat.id, categoryName: defaultCat.name,
             categoryEmoji: defaultCat.emoji, categoryHex: defaultCat.colorHex, date: Date()
         )

@@ -71,6 +71,12 @@ struct PaymentView: View {
     @State private var recordAsLend   = false
     @State private var showClipboardHint = false
 
+    // Split Properties
+    @State private var isSplitEnabled = false
+    @State private var showSplitSheet = false
+    @State private var splitGroupName = ""
+    @State private var finalSplitFriends: [(name: String, phone: String, share: Double)] = []
+
     @State private var qrPhotoItem: PhotosPickerItem? = nil
 
     enum PayField { case amount, name, upi, note }
@@ -389,20 +395,57 @@ struct PaymentView: View {
                             }
                             .padding(.bottom, 20)
 
-                            // ── Record as Lend toggle ──────────────────────────
+                            // ── Split toggle ───────────────────────────────
                             HStack(spacing: 12) {
                                 ZStack {
-                                    RoundedRectangle(cornerRadius: 10).fill(Color.incomeGreen.opacity(0.15)).frame(width: 38, height: 38)
-                                    Image(systemName: "arrow.up.circle").foregroundColor(.incomeGreen).font(.system(size: 16))
+                                    RoundedRectangle(cornerRadius: 10).fill(Color.catBlue.opacity(0.15)).frame(width: 38, height: 38)
+                                    Image(systemName: "person.2.fill").foregroundColor(.catBlue).font(.system(size: 16))
                                 }
                                 VStack(alignment: .leading, spacing: 1) {
-                                    Text("Record as Lend").font(.system(size: 14, weight: .medium)).foregroundColor(.white)
-                                    Text("Track in your lending history").font(.system(size: 11)).foregroundColor(.textSecondary)
+                                    Text("Split with Friends").font(.system(size: 14, weight: .medium)).foregroundColor(.white)
+                                    if isSplitEnabled && finalSplitFriends.isEmpty {
+                                        Text("Tap to setup split").font(.system(size: 11)).foregroundColor(.catBlue)
+                                    } else if isSplitEnabled {
+                                        Text("Splitting with \(finalSplitFriends.count) people").font(.system(size: 11)).foregroundColor(.catBlue)
+                                    } else {
+                                        Text("Divide expense with contacts").font(.system(size: 11)).foregroundColor(.textSecondary)
+                                    }
                                 }
                                 Spacer()
-                                Toggle("", isOn: $recordAsLend).toggleStyle(SwitchToggleStyle(tint: .incomeGreen)).labelsHidden()
+                                Toggle("", isOn: Binding(
+                                    get: { isSplitEnabled },
+                                    set: { val in 
+                                        if val { showSplitSheet = true }
+                                        else { 
+                                            isSplitEnabled = false
+                                            finalSplitFriends = []
+                                        }
+                                    }
+                                )).toggleStyle(SwitchToggleStyle(tint: .catBlue)).labelsHidden()
                             }
-                            .padding(16).glassCard(radius: 18).padding(.horizontal, 20).padding(.bottom, 20)
+                            .padding(16).glassCard(radius: 18).padding(.horizontal, 20).padding(.bottom, 8)
+                            .onTapGesture {
+                                if isSplitEnabled { showSplitSheet = true }
+                            }
+
+                            // ── Record as Lend toggle ──────────────────────────
+                            if !isSplitEnabled {
+                                HStack(spacing: 12) {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 10).fill(Color.incomeGreen.opacity(0.15)).frame(width: 38, height: 38)
+                                        Image(systemName: "arrow.up.circle").foregroundColor(.incomeGreen).font(.system(size: 16))
+                                    }
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text("Record as Lend").font(.system(size: 14, weight: .medium)).foregroundColor(.white)
+                                        Text("Track in your lending history").font(.system(size: 11)).foregroundColor(.textSecondary)
+                                    }
+                                    Spacer()
+                                    Toggle("", isOn: $recordAsLend).toggleStyle(SwitchToggleStyle(tint: .incomeGreen)).labelsHidden()
+                                }
+                                .padding(16).glassCard(radius: 18).padding(.horizontal, 20).padding(.bottom, 20)
+                            } else {
+                                Color.clear.frame(height: 12)
+                            }
 
                             // ── Pay Button ─────────────────────────────────────
                             Button { handlePay() } label: {
@@ -494,6 +537,15 @@ struct PaymentView: View {
         } message: {
             Text("The selected UPI app is not installed. The expense has been saved. Try using another app.")
         }
+        .sheet(isPresented: $showSplitSheet) {
+            CustomSplitSheet(
+                totalAmount: amount,
+                isSplitEnabled: $isSplitEnabled,
+                groupName: $splitGroupName,
+                finalFriends: $finalSplitFriends
+            )
+            .environmentObject(store)
+        }
         .overlay {
             if showSuccess { successOverlay }
         }
@@ -525,31 +577,43 @@ struct PaymentView: View {
         guard canProceed else { return }
         focusedField = nil
         let targetCat = selectedCategory ?? store.categories.first ?? AppCategory.defaultCategories[0]
-        var t = Transaction(
-            amount: amount,
-            recipientName: recipientName,
-            upiId: upiId,
-            note: note.isEmpty ? targetCat.name : note,
-            categoryId: targetCat.id,
-            categoryName: targetCat.name,
-            categoryEmoji: targetCat.emoji,
-            categoryHex: targetCat.colorHex,
-            date: Date(),
-            upiAppUsed: selectedApp,
-            linkedLendId: nil
-        )
-
-        if recordAsLend && !recipientName.isEmpty {
-            let lb = LendBorrow(
-                type: .lent, personName: recipientName,
-                contactPhone: upiId.isEmpty ? nil : upiId,
-                amount: amount, note: note.isEmpty ? "Via payment" : note,
-                date: Date(), dueDate: nil
+        if isSplitEnabled {
+            let myShare = max(0, amount - finalSplitFriends.reduce(0) { $0 + $1.share })
+            store.splitBill(
+                totalAmount: amount,
+                myShare: myShare,
+                note: note.isEmpty ? targetCat.name : note,
+                groupName: splitGroupName,
+                originalRecipient: recipientName,
+                friends: finalSplitFriends
             )
-            store.addLendBorrow(lb)
-            t.linkedLendId = lb.id
+        } else {
+            var t = Transaction(
+                amount: amount,
+                recipientName: recipientName,
+                upiId: upiId,
+                note: note.isEmpty ? targetCat.name : note,
+                categoryId: targetCat.id,
+                categoryName: targetCat.name,
+                categoryEmoji: targetCat.emoji,
+                categoryHex: targetCat.colorHex,
+                date: Date(),
+                upiAppUsed: selectedApp,
+                linkedLendId: nil
+            )
+    
+            if recordAsLend && !recipientName.isEmpty {
+                let lb = LendBorrow(
+                    type: .lent, personName: recipientName,
+                    contactPhone: upiId.isEmpty ? nil : upiId,
+                    amount: amount, note: note.isEmpty ? "Via payment" : note,
+                    date: Date(), dueDate: nil
+                )
+                store.addLendBorrow(lb)
+                t.linkedLendId = lb.id
+            }
+            store.addTransaction(t)
         }
-        store.addTransaction(t)
         store.saveUPI(name: recipientName, upi: upiId)
 
         savedAmount = amount
