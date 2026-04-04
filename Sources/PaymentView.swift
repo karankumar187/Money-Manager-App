@@ -718,6 +718,8 @@ struct CustomSplitSheet: View {
     
     // Track if a user has manually edited a field
     @State private var hasManuallyEdited: Set<String> = []
+    
+    @State private var showContactPicker = false
 
     private var friendsWithPhones: [(name: String, phone: String)] {
         store.savedContacts.compactMap { name, phone in
@@ -787,10 +789,21 @@ struct CustomSplitSheet: View {
 
                         // Contacts list
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("SPLIT WITH")
-                                .font(.system(size: 11, weight: .bold))
-                                .foregroundColor(.textSecondary).tracking(1.5)
-                                .padding(.horizontal, 24)
+                            HStack {
+                                Text("SPLIT WITH")
+                                    .font(.system(size: 11, weight: .bold))
+                                    .foregroundColor(.textSecondary).tracking(1.5)
+                                Spacer()
+                                Button {
+                                    showContactPicker = true
+                                } label: {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "plus")
+                                        Text("Add Contact")
+                                    }.font(.system(size: 13, weight: .bold)).foregroundColor(.accent1)
+                                }
+                            }
+                            .padding(.horizontal, 24)
 
                             if friendsWithPhones.isEmpty {
                                 Text("Add contacts with phone numbers in the Payments tab to split bills.")
@@ -894,6 +907,17 @@ struct CustomSplitSheet: View {
             }
             .onAppear {
                 initFromFinalFriends()
+            }
+            .sheet(isPresented: $showContactPicker) {
+                ContactPicker { name, phone, imageData in
+                    if let p = phone {
+                        store.addPaymentContact(name: name, phone: p)
+                        if let d = imageData { store.saveAvatar(name: name, data: d) }
+                        selectedFriends.insert(p)
+                        recalculateUnedited()
+                    }
+                }
+                .ignoresSafeArea()
             }
         }
     }
