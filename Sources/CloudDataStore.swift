@@ -96,7 +96,11 @@ class CloudDataStore: ObservableObject {
         var dict = profile.toDict()
         dict["budget"]          = monthlyBudget
         dict["currencySymbol"]  = currencySymbol
-        try? await userRef().setData(dict, merge: true)
+        do {
+            try await userRef().setData(dict, merge: true)
+        } catch {
+            print("Error saving profile: \(error)")
+        }
         userProfile = profile
         userName    = name
     }
@@ -459,12 +463,16 @@ class CloudDataStore: ObservableObject {
     // ── MARK: Lookup friend by phone ─────────────────────────────────
     func findUser(byPhone phone: String) async -> UserProfile? {
         let full = phone.hasPrefix("+91") ? phone : "+91\(phone)"
-        let snap = try? await db.collection("users")
-            .whereField("phone", isEqualTo: full)
-            .limit(to: 1)
-            .getDocuments()
-        guard let doc = snap?.documents.first else { return nil }
-        return UserProfile.from(doc.data(), uid: doc.documentID)
+        do {
+            let snap = try await db.collection("users")
+                .whereField("phone", isEqualTo: full)
+                .limit(to: 1)
+                .getDocuments()
+            guard let doc = snap.documents.first else { return nil }
+            return UserProfile.from(doc.data(), uid: doc.documentID)
+        } catch {
+            return nil
+        }
     }
 
     // Analytics helpers
