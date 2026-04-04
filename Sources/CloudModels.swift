@@ -120,6 +120,7 @@ extension Transaction {
         ]
         if let app = upiAppUsed    { d["upiAppUsed"]   = app.rawValue }
         if let lid = linkedLendId  { d["linkedLendId"] = lid.uuidString }
+        if let gid = splitGroupId  { d["splitGroupId"] = gid }
         return d
     }
 
@@ -146,7 +147,8 @@ extension Transaction {
             categoryHex:   dict["categoryHex"]   as? String ?? "#FFFFFF",
             date:          ts.dateValue(),
             upiAppUsed:    appRaw.flatMap { UPIApp(rawValue: $0) },
-            linkedLendId:  lendRaw.flatMap { UUID(uuidString: $0) }
+            linkedLendId:  lendRaw.flatMap { UUID(uuidString: $0) },
+            splitGroupId:  dict["splitGroupId"] as? String
         )
     }
 }

@@ -331,24 +331,28 @@ class CloudDataStore: ObservableObject {
 
     // Split a bill: deducts your share and creates shared ledgers for each friend
     func splitBill(totalAmount: Double, myShare: Double, note: String, groupName: String?, originalRecipient: String? = nil, friends: [(name: String, phone: String, share: Double)]) {
-        // Log your own expense
+        // Generate one shared group ID that links the tx + all ledger + lend records
+        let splitGroupId = UUID().uuidString
+
+        // Log your own expense, tagged with the split group ID
         let defaultCat = categories.first ?? AppCategory.defaultCategories[0]
-        let myTx = Transaction(
+        var myTx = Transaction(
             amount: myShare, recipientName: originalRecipient ?? "Split Bill", upiId: "",
             note: note, categoryId: defaultCat.id, categoryName: defaultCat.name,
             categoryEmoji: defaultCat.emoji, categoryHex: defaultCat.colorHex, date: Date()
         )
+        myTx.splitGroupId = splitGroupId
         addTransaction(myTx)
 
         // Create a shared ledger + contact card + lend record for each friend
         let myPhone = userProfile?.phone ?? ""
         let myName  = userName
         for friend in friends {
-            // 1. Shared ledger (Splitwise-style public record)
+            // 1. Shared ledger tagged with the group ID
             let ledger = SharedLedger(
-                id:        UUID().uuidString,
+                id:        splitGroupId + "-" + friend.phone, // deterministic ID
                 fromUID:   uid,
-                toUID:     "",  // Will be filled when friend links their account
+                toUID:     "",
                 fromPhone: myPhone,
                 toPhone:   friend.phone,
                 fromName:  myName,
@@ -364,16 +368,43 @@ class CloudDataStore: ObservableObject {
             // 2. Auto-create saved contact so card appears in the Payments tab
             addPaymentContact(name: friend.name, phone: friend.phone)
 
-            // 3. Personal lend record so balance shows on the card
+            // 3. Personal lend record tagged with splitGroupId via contactPhone field logic
             let lb = LendBorrow(
                 id: UUID(), type: .lent, personName: friend.name,
                 contactPhone: friend.phone,
                 amount: friend.share,
-                note: (groupName.flatMap { $0.isEmpty ? nil : $0 } ?? note),
+                note: note,
                 date: Date()
             )
-            addLendBorrow(lb)
+            // Store the splitGroupId in a dedicated Firestore field by saving it after
+            let lbRef = userRef().collection("lendborrows").document(lb.id.uuidString)
+            var lbDict = lb.toFirestoreDict()
+            lbDict["splitGroupId"] = splitGroupId
+            lbRef.setData(lbDict)
         }
+    }
+
+    // Deletes a transaction and, if it was a split, also removes all linked SharedLedgers and LendBorrows
+    func deleteTransactionAndSplitData(_ t: Transaction) {
+        // Always delete the transaction itself
+        userRef().collection("transactions").document(t.id.uuidString).delete()
+
+        guard let groupId = t.splitGroupId else { return }
+
+        // Delete all SharedLedger entries that belong to this split group
+        db.collection("shared_ledgers")
+            .whereField("id", isGreaterThanOrEqualTo: groupId)
+            .whereField("id", isLessThanOrEqualTo: groupId + "-\u{FFFF}")
+            .getDocuments { [weak self] snap, _ in
+                snap?.documents.forEach { $0.reference.delete() }
+
+                // Delete all LendBorrow records tagged with this splitGroupId
+                self?.userRef().collection("lendborrows")
+                    .whereField("splitGroupId", isEqualTo: groupId)
+                    .getDocuments { snap2, _ in
+                        snap2?.documents.forEach { $0.reference.delete() }
+                    }
+            }
     }
 
     // ── MARK: Categories ─────────────────────────────────────────────

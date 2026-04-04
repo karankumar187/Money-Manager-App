@@ -139,13 +139,13 @@ struct HistoryView: View {
                     ForEach(groups) { group in
                         Section {
                             ForEach(group.items) { t in
-                                TxRow(tx: t, onDelete: { store.deleteTransaction(id: t.id) })
+                                TxRow(tx: t, onDelete: { store.deleteTransactionAndSplitData(t) })
                                     .listRowBackground(Color.clear)
                                     .listRowInsets(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                                     .listRowSeparator(.hidden)
                                     .swipeActions(edge: .trailing) {
                                         Button(role: .destructive) {
-                                            store.deleteTransaction(id: t.id)
+                                            store.deleteTransactionAndSplitData(t)
                                         } label: { Label("Delete", systemImage: "trash.fill") }
                                     }
                             }

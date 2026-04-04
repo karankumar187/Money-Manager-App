@@ -266,11 +266,11 @@ struct TxRow: View {
             }
         }
         // Confirmation dialog
-        .alert("Remove This Expense?", isPresented: $showDeleteAlert) {
-            Button("Delete", role: .destructive) {
+        .alert("Remove This Expense?\(tx.splitGroupId != nil ? " (Split)" : "")", isPresented: $showDeleteAlert) {
+            Button("Delete\(tx.splitGroupId != nil ? " + Remove Split Debts" : "")", role: .destructive) {
                 withAnimation {
                     if let del = onDelete { del() }
-                    else { store.deleteTransaction(id: tx.id) }
+                    else { store.deleteTransactionAndSplitData(tx) }
                 }
             }
             Button("Keep It", role: .cancel) {}

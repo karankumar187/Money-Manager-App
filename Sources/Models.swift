@@ -105,6 +105,7 @@ struct Transaction: Identifiable, Codable {
     var date          : Date
     var upiAppUsed    : UPIApp?
     var linkedLendId  : UUID? = nil
+    var splitGroupId  : String? = nil   // set for the "my share" tx in a split payment
 
     var fallbackCategory: AppCategory {
         AppCategory(id: categoryId, name: categoryName, emoji: categoryEmoji, colorHex: categoryHex)
