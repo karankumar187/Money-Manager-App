@@ -5,7 +5,7 @@ import SwiftUI
 struct PersonDetailView: View {
     let personName : String
     let phone      : String?
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @Environment(\.dismiss) var dismiss
 
     @State private var showAddSheet      = false
@@ -281,7 +281,7 @@ struct SendMoneySheet: View {
     let prefilledAmount : Double
     let onPaid          : () -> Void  // called after payment to trigger clipboard hint
 
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @Environment(\.dismiss) var dismiss
 
     @State private var amountStr     = ""
@@ -638,7 +638,7 @@ struct LBEntryCard: View {
     let onMarkPaid  : () -> Void
     let onEdit      : () -> Void
     let onDelete    : () -> Void
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
 
     var body: some View {
         VStack(spacing: 12) {
@@ -750,7 +750,7 @@ struct AddEntryButton: View {
 
 struct PartialPaySheet: View {
     let entry: LendBorrow
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @Environment(\.dismiss) var dismiss
     @State private var amountStr = ""
     @FocusState private var focused: Bool
@@ -844,7 +844,7 @@ struct PartialPaySheet: View {
 
 struct EditEntrySheet: View {
     let entry: LendBorrow
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @Environment(\.dismiss) var dismiss
     @FocusState private var focused: Bool
 
@@ -930,6 +930,6 @@ struct EditEntrySheet: View {
 
 #Preview {
     PersonDetailView(personName: "Rahul Sharma", phone: "+91 98765 43210")
-        .environmentObject(DataStore())
+        .environmentObject(CloudDataStore())
         .preferredColorScheme(.dark)
 }

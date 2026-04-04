@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct DashboardView: View {
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @State private var selectedCategory: AppCategory? = nil
     @State private var showSettings = false
 
@@ -203,7 +203,7 @@ struct StatMini: View {
 struct TxRow: View {
     let tx: Transaction
     var onDelete: (() -> Void)? = nil
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @State private var showDeleteAlert = false
 
     var body: some View {
@@ -281,5 +281,5 @@ struct TxRow: View {
 }
 
 #Preview {
-    DashboardView().environmentObject(DataStore()).preferredColorScheme(.dark)
+    DashboardView().environmentObject(CloudDataStore()).preferredColorScheme(.dark)
 }

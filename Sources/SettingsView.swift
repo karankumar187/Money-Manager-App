@@ -2,7 +2,7 @@ import SwiftUI
 import PhotosUI
 
 struct SettingsView: View {
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @State private var showClearAlert = false
 
     var body: some View {
@@ -79,7 +79,15 @@ struct SettingsView: View {
                                         title: "Clear All Data", subtitle: "Delete everything permanently",
                                         isDestructive: true)
                         }
-                    } header: { SectionHeader("Data") }
+                        
+                        Button {
+                            store.signOut()
+                        } label: {
+                            SettingsRow(icon: "rectangle.portrait.and.arrow.right.fill", iconColor: .expenseRed,
+                                        title: "Sign Out", subtitle: "Log out of your account",
+                                        isDestructive: true)
+                        }
+                    } header: { SectionHeader("Account & Data") }
                 }
                 .listStyle(.insetGrouped)
                 .scrollContentBackground(.hidden)
@@ -100,7 +108,7 @@ struct SettingsView: View {
 // MARK: - Profile Settings
 
 struct ProfileSettingsView: View {
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @State private var nameInput = ""
     @State private var profileItem: PhotosPickerItem? = nil
     @FocusState private var focused: Bool
@@ -180,7 +188,7 @@ struct ProfileSettingsView: View {
 // MARK: - Budget Settings
 
 struct BudgetSettingsView: View {
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @State private var budgetInput = ""
     @FocusState private var focused: Bool
 
@@ -255,7 +263,7 @@ struct BudgetSettingsView: View {
 // MARK: - Currency Settings
 
 struct CurrencySettingsView: View {
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     let currencies = [("₹","Indian Rupee"),("$","US Dollar"),("€","Euro"),("£","British Pound"),("¥","Japanese Yen"),("د.إ","UAE Dirham")]
 
     var body: some View {
@@ -293,7 +301,7 @@ struct CurrencySettingsView: View {
 // MARK: - Category Manager
 
 struct CategoryManagerView: View {
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @State private var newName      = ""
     @State private var newEmoji     = ""
     @State private var selectedHex  = "#A29BFE"
@@ -405,7 +413,7 @@ struct CategoryManagerView: View {
 // MARK: - Edit Category Sheet
 
 struct EditCategorySheet: View {
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @Environment(\.dismiss) var dismiss
     
     let originalId: UUID
@@ -605,5 +613,5 @@ struct StatRow: View {
 }
 
 #Preview {
-    SettingsView().environmentObject(DataStore()).preferredColorScheme(.dark)
+    SettingsView().environmentObject(CloudDataStore()).preferredColorScheme(.dark)
 }

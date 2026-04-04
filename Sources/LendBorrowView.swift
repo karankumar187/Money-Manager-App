@@ -1,30 +1,16 @@
 import SwiftUI
 
-// MARK: - Person Group (computed from DataStore)
+// Convenience alias so existing code needs no further changes
+typealias PersonGroup = CloudDataStore.PersonGroup
 
-struct PersonGroup: Identifiable {
-    var id: String { name }
-    let name: String
-    let phone: String?
-    let entries: [LendBorrow]
-
-    var lentEntries     : [LendBorrow] { entries.filter { $0.type == .lent } }
-    var borrowedEntries : [LendBorrow] { entries.filter { $0.type == .borrowed } }
-    var totalLentOut    : Double { lentEntries.filter { !$0.isPaid }.reduce(0) { $0 + $1.remainingAmount } }
-    var totalBorrowed   : Double { borrowedEntries.filter { !$0.isPaid }.reduce(0) { $0 + $1.remainingAmount } }
-    var initial         : String { String(name.prefix(1)).uppercased() }
-    var color           : Color {
-        let palette: [Color] = [.catPurple, .accentBlue, .catOrange, .incomeGreen, .catPink, .catYellow]
-        return palette[abs(name.hashValue) % palette.count]
-    }
-}
 
 // MARK: - Main Lend/Borrow View
 
 struct LendBorrowView: View {
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
 
-    @State private var showAddSheet         = false
+    @State private var showAddSheet          = false
+    @State private var showSplitExpense      = false
     @State private var showContactPick       = false
     @State private var selectedPerson        : PersonGroup? = nil
     @State private var prefilledName         = ""
@@ -44,30 +30,10 @@ struct LendBorrowView: View {
     var grandTotalLent    : Double { store.lendBorrows.filter { $0.type == .lent     && !$0.isPaid }.reduce(0) { $0 + $1.remainingAmount } }
     var grandTotalBorrowed: Double { store.lendBorrows.filter { $0.type == .borrowed && !$0.isPaid }.reduce(0) { $0 + $1.remainingAmount } }
 
-    // Group by person name
-    var personGroups: [PersonGroup] {
-        var dict: [String: [LendBorrow]] = [:]
-        // 1. Group by existing lend/borrows
-        for lb in store.lendBorrows { dict[lb.personName, default: []].append(lb) }
-        
-        // 2. Add saved contacts if they don't exist yet
-        for (name, _) in store.savedContacts {
-            if dict[name] == nil {
-                dict[name] = []
-            }
-        }
-        
-        return dict.map { (name, entries) in
-            // Fallback phone to savedContacts if not in entries
-            let phone = entries.first(where: { $0.contactPhone != nil })?.contactPhone ?? store.savedContacts[name] ?? nil
-            return PersonGroup(name: name,
-                        phone: phone,
-                        entries: entries.sorted { $0.date > $1.date })
-        }.sorted { $0.name < $1.name }
-    }
-
-    var activeGroups: [PersonGroup] { personGroups.filter { $0.totalLentOut > 0 || $0.totalBorrowed > 0 } }
-    var settledGroups: [PersonGroup] { personGroups.filter { $0.totalLentOut == 0 && $0.totalBorrowed == 0 } }
+    // Group by person name — delegated to CloudDataStore
+    var personGroups: [PersonGroup] { store.personGroups }
+    var activeGroups: [PersonGroup] { store.personGroups.filter { $0.totalLentOut > 0 || $0.totalBorrowed > 0 } }
+    var settledGroups: [PersonGroup] { store.personGroups.filter { $0.totalLentOut == 0 && $0.totalBorrowed == 0 } }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -84,6 +50,16 @@ struct LendBorrowView: View {
                         .font(.system(size: 16, weight: .semibold)).foregroundColor(.white)
                         .frame(width: 36, height: 36)
                         .background(Color.accentBlue)
+                        .clipShape(Circle())
+                }
+                // Split a bill
+                Button {
+                    showSplitExpense = true
+                } label: {
+                    Image(systemName: "square.split.diagonal.2x2")
+                        .font(.system(size: 16, weight: .semibold)).foregroundColor(.white)
+                        .frame(width: 36, height: 36)
+                        .background(Color.catPurple)
                         .clipShape(Circle())
                 }
                 // Add lend/borrow record
@@ -198,6 +174,9 @@ struct LendBorrowView: View {
             PersonDetailView(personName: group.name, phone: group.phone)
                 .environmentObject(store)
         }
+        .sheet(isPresented: $showSplitExpense) {
+            SplitExpenseView()
+        }
         // Clipboard hint banner
         .overlay(alignment: .bottom) {
             if showClipboardHint {
@@ -301,7 +280,7 @@ struct PersonCard: View {
     let group: PersonGroup
     let onTap: () -> Void
 
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
 
     var body: some View {
         Button(action: onTap) {
@@ -366,7 +345,7 @@ struct PersonCard: View {
 // MARK: - Add Sheet
 
 struct LBAddSheet: View {
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @Environment(\.dismiss) var dismiss
     @FocusState private var focusedField: LBField?
 
@@ -561,5 +540,5 @@ struct EmptyLendView: View {
 }
 
 #Preview {
-    LendBorrowView().environmentObject(DataStore()).preferredColorScheme(.dark)
+    LendBorrowView().environmentObject(CloudDataStore()).preferredColorScheme(.dark)
 }

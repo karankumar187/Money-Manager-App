@@ -5,6 +5,11 @@ options:
     iOS: "16.0"
   createIntermediateGroups: false
 
+packages:
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk
+    from: "11.0.0"
+
 targets:
   MoneyManager:
     type: application
@@ -16,6 +21,13 @@ targets:
           - "*.yml"
           - "*.md"
       - path: Sources/Assets.xcassets
+    dependencies:
+      - package: Firebase
+        product: FirebaseAuth
+      - package: Firebase
+        product: FirebaseFirestore
+      - package: Firebase
+        product: FirebaseStorage
     settings:
       base:
         PRODUCT_NAME: MoneyManager
@@ -23,10 +35,10 @@ targets:
         SWIFT_VERSION: "5.9"
         IPHONEOS_DEPLOYMENT_TARGET: "16.0"
         TARGETED_DEVICE_FAMILY: "1"
-        # Let Xcode auto-generate the Info.plist (no CFBundleExecutable issue)
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: MoneyManager
         INFOPLIST_KEY_NSCameraUsageDescription: "Scan UPI QR codes to auto-fill recipient details"
+        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "Choose a profile picture or upload a QR code"
         INFOPLIST_KEY_UILaunchStoryboardName: ""
         INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations_~iphone: UIInterfaceOrientationPortrait

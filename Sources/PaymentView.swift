@@ -49,7 +49,7 @@ struct UPILogoButton: View {
 // MARK: - Payment View
 
 struct PaymentView: View {
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @Environment(\.dismiss) var dismiss
     @FocusState private var focusedField: PayField?
 

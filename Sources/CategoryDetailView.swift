@@ -4,7 +4,7 @@ import SwiftUI
 
 struct CategoryDetailView: View {
     let category: AppCategory
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @Environment(\.dismiss) var dismiss
 
     // All transactions for this category this month
@@ -213,6 +213,6 @@ struct CategoryDetailView: View {
 
 #Preview {
     CategoryDetailView(category: AppCategory.defaultCategories[0])
-        .environmentObject(DataStore())
+        .environmentObject(CloudDataStore())
         .preferredColorScheme(.dark)
 }

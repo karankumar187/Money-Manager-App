@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HistoryView: View {
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @State private var search       = ""
     @State private var filterCat    : AppCategory? = nil
     @State private var showFilters  = false
@@ -167,6 +167,6 @@ struct HistoryView: View {
 }
 
 #Preview {
-    HistoryView().environmentObject(DataStore()).preferredColorScheme(.dark)
+    HistoryView().environmentObject(CloudDataStore()).preferredColorScheme(.dark)
         .background(Color.bgPrimary)
 }

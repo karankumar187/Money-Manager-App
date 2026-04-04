@@ -7,12 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2FF37516EE86783D38578FA2 /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C994F283632BFDCE4B285A7 /* ProfileSetupView.swift */; };
 		3DA204DB6FB44A7CF5D5C7F2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836F3A9BB222295284A40EE5 /* ContentView.swift */; };
+		43E5D53AAB1AC53D556AF45D /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 322B0AE1FDC350BE1B5B43A0 /* AuthService.swift */; };
+		5075EC7222A359FF62083E76 /* SplitExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B7BBA5BD18AD79788CC025 /* SplitExpenseView.swift */; };
 		56C113A3BE44CDEB2B395248 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BF3C5CB0F44B1E8C1F4B7F /* SettingsView.swift */; };
 		5CCE63893BBCB2E778FE3BBF /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B50E591E59BCFEE1BFC3D4 /* Models.swift */; };
 		6231E0C0E4FB0C733950C521 /* PersonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA582198EDF37B7FC9C0BBF /* PersonDetailView.swift */; };
+		6871400EB133118DBB06A071 /* MigrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71501276EE2D63AE77CA3806 /* MigrationService.swift */; };
+		6F98E1284F544E7F686CA1B2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04A9A95734E58170DD6951DF /* GoogleService-Info.plist */; };
 		74601C154D27B82A954C7F93 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA12A25BD0B1951EB5A3F547 /* DashboardView.swift */; };
 		8358DF52BB407B45A8027CD9 /* AdditionalInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 27EE2808191C044B6BE74A2B /* AdditionalInfo.plist */; };
+		8B7299E32699A5F7D2BB66D8 /* CloudModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76850F5DE2A4E8AC033614F4 /* CloudModels.swift */; };
 		8CF50E21777FE9BD76E82BC3 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884F3AF177E13A62708E22C4 /* HistoryView.swift */; };
 		993A95D81AA5B9DF0A706C81 /* LendBorrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A2ACB4CCFCFAF821D7D6C8 /* LendBorrowView.swift */; };
 		A1ED2FA03FF5650554419CB4 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735D56DAB0F87B6320C23002 /* QRScannerView.swift */; };
@@ -22,28 +28,54 @@
 		DC119580BF98CFC3E5D37DD3 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C428B0E3CE8EA3A4CF18CD /* Theme.swift */; };
 		E2FB9C35A51D71B3AADAFB63 /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C555460308FD0A40854754C3 /* AnalyticsView.swift */; };
 		EDFB1C27769C78B8D74F026B /* PaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FE13772A3B94682C5D4B340 /* PaymentView.swift */; };
+		EFDFCEE74DC3CCD87565A178 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0782B8D30568E70B5F49BF86 /* LoginView.swift */; };
+		F316E22B5ED387CDCB34EAC3 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3B12BB289486C5DB49578FBD /* FirebaseAuth */; };
 		F4793B6EE64545B9B0F52520 /* ContactPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49B0366EC866802B0AFB124 /* ContactPickerView.swift */; };
+		F66434C1CA3177C6332E054B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F2C05F8E0AEBD0EC2029A76C /* FirebaseStorage */; };
+		F9F65E8CD9D064E6E424C6EB /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CABF923489583299C62C8F72 /* FirebaseFirestore */; };
+		FCD449776DBB09B18B00A1F4 /* CloudDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FE0C5E26F1138D96C6A5A8 /* CloudDataStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		04A9A95734E58170DD6951DF /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		06FE0C5E26F1138D96C6A5A8 /* CloudDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudDataStore.swift; sourceTree = "<group>"; };
+		0782B8D30568E70B5F49BF86 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		14EC9769C85DA8F8ECFE2803 /* MoneyManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyManagerApp.swift; sourceTree = "<group>"; };
 		27EE2808191C044B6BE74A2B /* AdditionalInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = AdditionalInfo.plist; sourceTree = "<group>"; };
+		2C994F283632BFDCE4B285A7 /* ProfileSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupView.swift; sourceTree = "<group>"; };
+		322B0AE1FDC350BE1B5B43A0 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		6CA582198EDF37B7FC9C0BBF /* PersonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailView.swift; sourceTree = "<group>"; };
 		6FE13772A3B94682C5D4B340 /* PaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentView.swift; sourceTree = "<group>"; };
+		71501276EE2D63AE77CA3806 /* MigrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationService.swift; sourceTree = "<group>"; };
 		735D56DAB0F87B6320C23002 /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
+		76850F5DE2A4E8AC033614F4 /* CloudModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudModels.swift; sourceTree = "<group>"; };
 		79BF3C5CB0F44B1E8C1F4B7F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		836F3A9BB222295284A40EE5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		884F3AF177E13A62708E22C4 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		96B50E591E59BCFEE1BFC3D4 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		9B674D7B1629C6B6B7663DE0 /* CategoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailView.swift; sourceTree = "<group>"; };
+		A6B7BBA5BD18AD79788CC025 /* SplitExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitExpenseView.swift; sourceTree = "<group>"; };
 		A9A2ACB4CCFCFAF821D7D6C8 /* LendBorrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LendBorrowView.swift; sourceTree = "<group>"; };
 		C555460308FD0A40854754C3 /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
-		D3AD0545F2DB4B15E1E160D0 /* MoneyManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoneyManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3AD0545F2DB4B15E1E160D0 /* MoneyManager.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MoneyManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D49B0366EC866802B0AFB124 /* ContactPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactPickerView.swift; sourceTree = "<group>"; };
 		E7C428B0E3CE8EA3A4CF18CD /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		EA12A25BD0B1951EB5A3F547 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		F8728879F691A08BC1649561 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6F9AD87370D25C3EAF3BA3BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F316E22B5ED387CDCB34EAC3 /* FirebaseAuth in Frameworks */,
+				F9F65E8CD9D064E6E424C6EB /* FirebaseFirestore in Frameworks */,
+				F66434C1CA3177C6332E054B /* FirebaseStorage in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		1137AD2659291AA67BDE996B = {
@@ -68,18 +100,26 @@
 				27EE2808191C044B6BE74A2B /* AdditionalInfo.plist */,
 				C555460308FD0A40854754C3 /* AnalyticsView.swift */,
 				F8728879F691A08BC1649561 /* Assets.xcassets */,
+				322B0AE1FDC350BE1B5B43A0 /* AuthService.swift */,
 				9B674D7B1629C6B6B7663DE0 /* CategoryDetailView.swift */,
+				06FE0C5E26F1138D96C6A5A8 /* CloudDataStore.swift */,
+				76850F5DE2A4E8AC033614F4 /* CloudModels.swift */,
 				D49B0366EC866802B0AFB124 /* ContactPickerView.swift */,
 				836F3A9BB222295284A40EE5 /* ContentView.swift */,
 				EA12A25BD0B1951EB5A3F547 /* DashboardView.swift */,
+				04A9A95734E58170DD6951DF /* GoogleService-Info.plist */,
 				884F3AF177E13A62708E22C4 /* HistoryView.swift */,
 				A9A2ACB4CCFCFAF821D7D6C8 /* LendBorrowView.swift */,
+				0782B8D30568E70B5F49BF86 /* LoginView.swift */,
+				71501276EE2D63AE77CA3806 /* MigrationService.swift */,
 				96B50E591E59BCFEE1BFC3D4 /* Models.swift */,
 				14EC9769C85DA8F8ECFE2803 /* MoneyManagerApp.swift */,
 				6FE13772A3B94682C5D4B340 /* PaymentView.swift */,
 				6CA582198EDF37B7FC9C0BBF /* PersonDetailView.swift */,
+				2C994F283632BFDCE4B285A7 /* ProfileSetupView.swift */,
 				735D56DAB0F87B6320C23002 /* QRScannerView.swift */,
 				79BF3C5CB0F44B1E8C1F4B7F /* SettingsView.swift */,
+				A6B7BBA5BD18AD79788CC025 /* SplitExpenseView.swift */,
 				E7C428B0E3CE8EA3A4CF18CD /* Theme.swift */,
 			);
 			path = Sources;
@@ -94,6 +134,7 @@
 			buildPhases = (
 				DA3BE4EE7B40DE5916A779C8 /* Sources */,
 				D5DBAFA817219EFFE85EA692 /* Resources */,
+				6F9AD87370D25C3EAF3BA3BA /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -101,6 +142,9 @@
 			);
 			name = MoneyManager;
 			packageProductDependencies = (
+				3B12BB289486C5DB49578FBD /* FirebaseAuth */,
+				CABF923489583299C62C8F72 /* FirebaseFirestore */,
+				F2C05F8E0AEBD0EC2029A76C /* FirebaseStorage */,
 			);
 			productName = MoneyManager;
 			productReference = D3AD0545F2DB4B15E1E160D0 /* MoneyManager.app */;
@@ -129,6 +173,9 @@
 			);
 			mainGroup = 1137AD2659291AA67BDE996B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				064B011E87509770B9D7A9F8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5E06FD11688B491327CF6AA6 /* Products */;
 			projectDirPath = "";
@@ -146,6 +193,7 @@
 			files = (
 				8358DF52BB407B45A8027CD9 /* AdditionalInfo.plist in Resources */,
 				CD2DD389B9EC2B68D2AB107E /* Assets.xcassets in Resources */,
+				6F98E1284F544E7F686CA1B2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,18 +205,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2FB9C35A51D71B3AADAFB63 /* AnalyticsView.swift in Sources */,
+				43E5D53AAB1AC53D556AF45D /* AuthService.swift in Sources */,
 				B35D96C86D71BAC06B3B7AFE /* CategoryDetailView.swift in Sources */,
+				FCD449776DBB09B18B00A1F4 /* CloudDataStore.swift in Sources */,
+				8B7299E32699A5F7D2BB66D8 /* CloudModels.swift in Sources */,
 				F4793B6EE64545B9B0F52520 /* ContactPickerView.swift in Sources */,
 				3DA204DB6FB44A7CF5D5C7F2 /* ContentView.swift in Sources */,
 				74601C154D27B82A954C7F93 /* DashboardView.swift in Sources */,
 				8CF50E21777FE9BD76E82BC3 /* HistoryView.swift in Sources */,
 				993A95D81AA5B9DF0A706C81 /* LendBorrowView.swift in Sources */,
+				EFDFCEE74DC3CCD87565A178 /* LoginView.swift in Sources */,
+				6871400EB133118DBB06A071 /* MigrationService.swift in Sources */,
 				5CCE63893BBCB2E778FE3BBF /* Models.swift in Sources */,
 				C59CBB66A7C52F35113C6BC9 /* MoneyManagerApp.swift in Sources */,
 				EDFB1C27769C78B8D74F026B /* PaymentView.swift in Sources */,
 				6231E0C0E4FB0C733950C521 /* PersonDetailView.swift in Sources */,
+				2FF37516EE86783D38578FA2 /* ProfileSetupView.swift in Sources */,
 				A1ED2FA03FF5650554419CB4 /* QRScannerView.swift in Sources */,
 				56C113A3BE44CDEB2B395248 /* SettingsView.swift in Sources */,
+				5075EC7222A359FF62083E76 /* SplitExpenseView.swift in Sources */,
 				DC119580BF98CFC3E5D37DD3 /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -183,11 +238,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5366HDN475;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = MoneyManager;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Scan UPI QR codes to auto-fill recipient details";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Choose a profile picture or upload a QR code";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				"INFOPLIST_KEY_UISupportedInterfaceOrientations_~iphone" = UIInterfaceOrientationPortrait;
@@ -276,11 +331,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5366HDN475;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = MoneyManager;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Scan UPI QR codes to auto-fill recipient details";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Choose a profile picture or upload a QR code";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				"INFOPLIST_KEY_UISupportedInterfaceOrientations_~iphone" = UIInterfaceOrientationPortrait;
@@ -377,6 +432,35 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		064B011E87509770B9D7A9F8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3B12BB289486C5DB49578FBD /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 064B011E87509770B9D7A9F8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		CABF923489583299C62C8F72 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 064B011E87509770B9D7A9F8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		F2C05F8E0AEBD0EC2029A76C /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 064B011E87509770B9D7A9F8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 08B2D55128817955F24DB960 /* Project object */;
 }

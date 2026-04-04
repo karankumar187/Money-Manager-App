@@ -2,7 +2,7 @@ import SwiftUI
 import Charts
 
 struct AnalyticsView: View {
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @State private var period: AnalyticsPeriod = .monthly
     @State private var selectedCategory: AppCategory? = nil
 
@@ -223,7 +223,7 @@ struct DonutChart: View {
 
 struct CategoryBar: View {
     let item: CategorySpend; let total: Double
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @State private var animate = false
 
     var body: some View {
@@ -249,5 +249,5 @@ struct CategoryBar: View {
 }
 
 #Preview {
-    AnalyticsView().environmentObject(DataStore()).preferredColorScheme(.dark)
+    AnalyticsView().environmentObject(CloudDataStore()).preferredColorScheme(.dark)
 }

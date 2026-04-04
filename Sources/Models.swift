@@ -44,7 +44,7 @@ enum UPIApp: String, Codable, CaseIterable, Identifiable {
         case .gpay:    urlStr = "tez://"
         case .phonepe: urlStr = "phonepe://"
         case .kotak:   urlStr = "kotak811://"
-        case .slice:   urlStr = "slice://"
+        case .slice:   urlStr = "slicepay://"
         }
         return URL(string: urlStr)
     }

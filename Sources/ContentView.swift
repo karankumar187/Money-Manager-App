@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var store: DataStore
+    @EnvironmentObject var store: CloudDataStore
     @State private var selectedTab = 0
     @State private var showPay     = false
 
@@ -116,5 +116,5 @@ struct MinimalTabItem: View {
 }
 
 #Preview {
-    ContentView().environmentObject(DataStore())
+    ContentView().environmentObject(CloudDataStore())
 }
