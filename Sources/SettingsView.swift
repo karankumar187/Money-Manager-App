@@ -140,7 +140,7 @@ struct ProfileSettingsView: View {
                         }
                     }
                 }
-                .onChange(of: profileItem) { newItem in
+                .onChange(of: profileItem) { _, newItem in
                     Task {
                         if let data = try? await newItem?.loadTransferable(type: Data.self) {
                             DispatchQueue.main.async { store.setProfileImage(data) }

@@ -115,6 +115,36 @@ class CloudDataStore: ObservableObject {
         userRef().setData(update, merge: true)
     }
 
+    // ── Convenience aliases matching old DataStore API ───────────────
+    func setName(_ name: String)         { saveSetting(name: name) }
+    func setCurrency(_ symbol: String)   { saveSetting(currency: symbol) }
+
+    func setProfileImage(_ data: Data) {
+        userProfileImageData = data
+        UserDefaults.standard.set(data, forKey: "mm_profile_image")
+        // Also upload async in background
+        Task { await uploadProfileImageAndSave(data) }
+    }
+
+    private func uploadProfileImageAndSave(_ data: Data) async {
+        if let url = await uploadProfileImage(data) {
+            userRef().setData(["profileImageURL": url], merge: true)
+        }
+    }
+
+    // Category helpers with old naming convention
+    func deleteAppCategory(id: UUID) {
+        deleteCategory(categories.first(where: { $0.id == id }) ?? AppCategory(id: id, name: "", emoji: "", colorHex: ""))
+    }
+
+    func updateAppCategory(_ c: AppCategory) {
+        updateCategory(c)
+    }
+
+    func addAppCategory(_ c: AppCategory) {
+        addCategory(c)
+    }
+
     // ── Real-time Listeners ───────────────────────────────────────────
     private func listenTransactions() {
         txListener = userRef().collection("transactions")

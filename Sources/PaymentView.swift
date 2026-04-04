@@ -162,7 +162,7 @@ struct PaymentView: View {
                                     }
                                     .padding(16).glassCard(radius: 16)
                                 }
-                                .onChange(of: qrPhotoItem) { newItem in
+                                .onChange(of: qrPhotoItem) { _, newItem in
                                     Task {
                                         if let data = try? await newItem?.loadTransferable(type: Data.self),
                                            let uiImage = UIImage(data: data) {
