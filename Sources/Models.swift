@@ -307,7 +307,7 @@ class DataStore: ObservableObject {
         let total = filtered.reduce(0) { $0 + $1.amount }
         return grouped.map { (catId, items) -> CategorySpend in
             let sum = items.reduce(0) { $0 + $1.amount }
-            let appCat = categories.first(where: { $0.id == catId }) ?? items.first!.fallbackCategory
+            let appCat = categories.first(where: { $0.id == catId }) ?? items.first?.fallbackCategory ?? AppCategory.defaultCategories[0]
             return CategorySpend(category: appCat, amount: sum, percentage: total > 0 ? sum / total : 0)
         }.sorted { $0.amount > $1.amount }
     }
