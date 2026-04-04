@@ -458,6 +458,64 @@ class CloudDataStore: ObservableObject {
             return CategorySpend(category: cat, amount: amt, percentage: total > 0 ? amt/total : 0)
         }.sorted { $0.amount > $1.amount }
     }
+
+    // Full period-filtered version matching the old DataStore API used by DashboardView & AnalyticsView
+    func categoryData(for period: AnalyticsPeriod = .monthly) -> [CategorySpend] {
+        let cal = Calendar.current
+        let filtered: [Transaction]
+        switch period {
+        case .daily:
+            filtered = transactions.filter { cal.isDateInToday($0.date) }
+        case .weekly:
+            let s = cal.date(from: cal.dateComponents([.yearForWeekOfYear,.weekOfYear], from: Date()))!
+            filtered = transactions.filter { $0.date >= s }
+        case .monthly:
+            let s = cal.date(from: cal.dateComponents([.year,.month], from: Date()))!
+            filtered = transactions.filter { $0.date >= s }
+        }
+        let grouped = Dictionary(grouping: filtered, by: { $0.categoryId })
+        let total = filtered.reduce(0) { $0 + $1.amount }
+        return grouped.compactMap { (catId, items) -> CategorySpend? in
+            let sum = items.reduce(0) { $0 + $1.amount }
+            let appCat = categories.first(where: { $0.id == catId }) ?? items.first!.fallbackCategory
+            return CategorySpend(category: appCat, amount: sum, percentage: total > 0 ? sum / total : 0)
+        }.sorted { $0.amount > $1.amount }
+    }
+
+    func dailyData(days n: Int = 14) -> [DailySpend] {
+        let cal = Calendar.current
+        let fmt = DateFormatter(); fmt.dateFormat = "d MMM"
+        return (0..<n).reversed().map { offset in
+            let d = cal.date(byAdding: .day, value: -offset, to: Date())!
+            let s = cal.startOfDay(for: d), e = cal.date(byAdding: .day, value: 1, to: s)!
+            let total = transactions.filter { $0.date >= s && $0.date < e }.reduce(0) { $0+$1.amount }
+            return DailySpend(date: d, label: fmt.string(from: d), amount: total)
+        }
+    }
+
+    func weeklyData(weeks n: Int = 8) -> [WeeklySpend] {
+        let cal = Calendar.current
+        let fmt = DateFormatter(); fmt.dateFormat = "d MMM"
+        return (0..<n).reversed().map { offset in
+            let ref = cal.date(byAdding: .weekOfYear, value: -offset, to: Date())!
+            let s = cal.date(from: cal.dateComponents([.yearForWeekOfYear,.weekOfYear], from: ref))!
+            let e = cal.date(byAdding: .weekOfYear, value: 1, to: s)!
+            let total = transactions.filter { $0.date >= s && $0.date < e }.reduce(0) { $0+$1.amount }
+            return WeeklySpend(label: offset == 0 ? "This wk" : fmt.string(from: s), amount: total)
+        }
+    }
+
+    func monthlyData(months n: Int = 6) -> [MonthlySpend] {
+        let cal = Calendar.current
+        let fmt = DateFormatter(); fmt.dateFormat = "MMM"
+        return (0..<n).reversed().map { offset in
+            let ref = cal.date(byAdding: .month, value: -offset, to: Date())!
+            let s = cal.date(from: cal.dateComponents([.year,.month], from: ref))!
+            let e = cal.date(byAdding: .month, value: 1, to: s)!
+            let total = transactions.filter { $0.date >= s && $0.date < e }.reduce(0) { $0+$1.amount }
+            return MonthlySpend(label: fmt.string(from: ref), amount: total)
+        }
+    }
 }
 
 // MARK: - UI Extensions for PersonGroup
