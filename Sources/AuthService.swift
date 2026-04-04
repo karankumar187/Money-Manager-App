@@ -1,6 +1,7 @@
 import Foundation
 import FirebaseAuth
 import Combine
+import UIKit
 
 // MARK: - AuthService
 // Handles phone OTP sign-in via Firebase Authentication.
