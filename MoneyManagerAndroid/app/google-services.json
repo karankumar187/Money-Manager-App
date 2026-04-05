@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "15851664920-pv85rtmh53lsinv61p209nqbo6itjm4a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moneymanager.app",
+            "certificate_hash": "a23aec17d8b8818013699cb16119b0696c42d5eb"
+          }
+        },
+        {
           "client_id": "15851664920-ppsr2d6d969nbqfhv3a9j0np0eqdf90l.apps.googleusercontent.com",
           "client_type": 3
         }
