@@ -51,6 +51,13 @@ class MainViewModel : ViewModel() {
         .filter { it.type == LendBorrowType.LENT && !it.isPaid }.sumOf { it.remainingAmount }
     val totalBorrowed get() = _lendBorrows.value
         .filter { it.type == LendBorrowType.BORROWED && !it.isPaid }.sumOf { it.remainingAmount }
+    val thisWeekTotal get() = _transactions.value
+        .filter { isThisWeek(it.date) }.sumOf { it.amount }
+    val averageDailySpend get(): Double {
+        val now = java.util.Calendar.getInstance()
+        val dayOfMonth = now.get(java.util.Calendar.DAY_OF_MONTH).coerceAtLeast(1)
+        return thisMonthTotal / dayOfMonth
+    }
 
     fun formatted(amount: Double) = formatAmount(amount, _currencySymbol.value)
 
@@ -210,6 +217,12 @@ class MainViewModel : ViewModel() {
         val cal = java.util.Calendar.getInstance()
         val c2  = java.util.Calendar.getInstance().apply { time = date }
         return cal.get(java.util.Calendar.DAY_OF_YEAR) == c2.get(java.util.Calendar.DAY_OF_YEAR) &&
+                cal.get(java.util.Calendar.YEAR) == c2.get(java.util.Calendar.YEAR)
+    }
+    private fun isThisWeek(date: Date): Boolean {
+        val cal = java.util.Calendar.getInstance()
+        val c2  = java.util.Calendar.getInstance().apply { time = date }
+        return cal.get(java.util.Calendar.WEEK_OF_YEAR) == c2.get(java.util.Calendar.WEEK_OF_YEAR) &&
                 cal.get(java.util.Calendar.YEAR) == c2.get(java.util.Calendar.YEAR)
     }
     private fun isSameMonth(date: Date): Boolean {

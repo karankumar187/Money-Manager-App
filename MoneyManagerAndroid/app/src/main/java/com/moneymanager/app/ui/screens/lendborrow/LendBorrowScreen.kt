@@ -13,10 +13,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.moneymanager.app.data.models.*
 import com.moneymanager.app.ui.theme.*
 import com.moneymanager.app.ui.viewmodel.MainViewModel
@@ -29,79 +29,105 @@ fun LendBorrowScreen(
     onBack: () -> Unit
 ) {
     val lendBorrows by viewModel.lendBorrows.collectAsState()
-    val contacts by viewModel.savedContacts.collectAsState()
+    val contacts    by viewModel.savedContacts.collectAsState()
+    var showAddSheet by remember { mutableStateOf(false) }
 
-    val people = lendBorrows
-        .filter { !it.isPaid }
-        .groupBy { it.personName }
-        .entries
-        .sortedByDescending { (_, entries) -> entries.sumOf { it.remainingAmount } }
+    val grandTotalLent     = lendBorrows.filter { it.type == LendBorrowType.LENT     && !it.isPaid }.sumOf { it.remainingAmount }
+    val grandTotalBorrowed = lendBorrows.filter { it.type == LendBorrowType.BORROWED && !it.isPaid }.sumOf { it.remainingAmount }
 
-    val totalLent     = viewModel.totalLent
-    val totalBorrowed = viewModel.totalBorrowed
+    // Group by person — active (outstanding) + settled
+    val grouped = lendBorrows.groupBy { it.personName }
+    val activeGroups   = grouped.entries.filter { (_, entries) ->
+        entries.any { !it.isPaid }
+    }.sortedByDescending { (_, entries) -> entries.sumOf { it.remainingAmount } }
+    val settledGroups  = grouped.entries.filter { (_, entries) ->
+        entries.all { it.isPaid }
+    }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Lends & Borrows", fontWeight = FontWeight.Bold) },
-                navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Default.ArrowBack, null, tint = Accent1) } },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = BgPrimary, titleContentColor = TextPrimary)
-            )
-        },
-        containerColor = BgPrimary
-    ) { innerPadding ->
-        LazyColumn(
-            contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = innerPadding.calculateTopPadding() + 8.dp, bottom = 80.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(BgPrimary)
+            .systemBarsPadding()
+    ) {
+        // ── Header — matches iOS exactly ────────────────────────────────
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .padding(top = 16.dp, bottom = 16.dp),
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Summary card
-            item {
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = BgCard),
-                    shape = RoundedCornerShape(20.dp), modifier = Modifier.fillMaxWidth()
+            Text("Payments", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                // Add lend/borrow record
+                Box(
+                    Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(Accent1)
+                        .clickable { showAddSheet = true },
+                    contentAlignment = Alignment.Center
                 ) {
-                    Row(
-                        Modifier.fillMaxWidth().padding(20.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                    Icon(Icons.Default.Add, null, tint = Color.White, modifier = Modifier.size(18.dp))
+                }
+            }
+        }
+
+        // ── Summary pills — LENT OUT | BORROWED ─────────────────────────
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 20.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            SummaryPill("LENT OUT", viewModel.formatted(grandTotalLent), IncomeGreen, Modifier.weight(1f))
+            SummaryPill("BORROWED", viewModel.formatted(grandTotalBorrowed), ExpenseRed, Modifier.weight(1f))
+        }
+
+        // ── Person list ─────────────────────────────────────────────────
+        LazyColumn(
+            contentPadding = PaddingValues(bottom = 100.dp),
+            verticalArrangement = Arrangement.spacedBy(0.dp)
+        ) {
+            if (activeGroups.isEmpty() && settledGroups.isEmpty()) {
+                item {
+                    Column(
+                        Modifier.fillMaxWidth().padding(60.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("LENT OUT", style = MaterialTheme.typography.labelSmall, color = TextSecondary)
-                            Text(viewModel.formatted(totalLent), fontWeight = FontWeight.ExtraBold, fontSize = 20.sp, color = IncomeGreen)
-                        }
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("NET", style = MaterialTheme.typography.labelSmall, color = TextSecondary)
-                            val net = totalLent - totalBorrowed
-                            Text(viewModel.formatted(kotlin.math.abs(net)), fontWeight = FontWeight.ExtraBold, fontSize = 20.sp,
-                                color = if (net >= 0) IncomeGreen else ExpenseRed)
-                            Text(if (net >= 0) "in your favor" else "you owe", fontSize = 10.sp, color = TextSecondary)
-                        }
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("BORROWED", style = MaterialTheme.typography.labelSmall, color = TextSecondary)
-                            Text(viewModel.formatted(totalBorrowed), fontWeight = FontWeight.ExtraBold, fontSize = 20.sp, color = ExpenseRed)
-                        }
+                        Icon(Icons.Default.Balance, null, tint = TextTertiary, modifier = Modifier.size(56.dp))
+                        Text("No lend/borrow records", fontSize = 15.sp, color = TextSecondary)
+                        Text("Tap + to add a record", fontSize = 13.sp, color = TextTertiary)
                     }
                 }
             }
 
-            if (people.isEmpty()) {
-                item {
-                    Box(Modifier.fillMaxWidth().height(200.dp), contentAlignment = Alignment.Center) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Icon(Icons.Default.Balance, null, tint = TextTertiary, modifier = Modifier.size(48.dp))
-                            Text("No outstanding balances", color = TextSecondary)
-                        }
-                    }
-                }
-            } else {
-                items(people) { (name, entries) ->
-                    val totalLentEntry     = entries.filter { it.type == LendBorrowType.LENT }.sumOf { it.remainingAmount }
-                    val totalBorrowedEntry = entries.filter { it.type == LendBorrowType.BORROWED }.sumOf { it.remainingAmount }
+            if (activeGroups.isNotEmpty()) {
+                item { SectionLabel("OUTSTANDING") }
+                items(activeGroups) { (name, entries) ->
                     val phone = contacts[name]
                     PersonCard(
-                        name = name,
-                        phone = phone,
-                        totalLent = totalLentEntry,
-                        totalBorrowed = totalBorrowedEntry,
+                        name = name, phone = phone,
+                        totalLent = entries.filter { it.type == LendBorrowType.LENT }.sumOf { it.remainingAmount },
+                        totalBorrowed = entries.filter { it.type == LendBorrowType.BORROWED }.sumOf { it.remainingAmount },
+                        hasSplit = entries.any { it.splitGroupId != null },
+                        onClick = { onPersonTap(name, phone) }
+                    )
+                }
+            }
+
+            if (settledGroups.isNotEmpty()) {
+                item { SectionLabel("OTHER CONTACTS") }
+                items(settledGroups) { (name, entries) ->
+                    val phone = contacts[name]
+                    PersonCard(
+                        name = name, phone = phone,
+                        totalLent = 0.0, totalBorrowed = 0.0,
                         hasSplit = entries.any { it.splitGroupId != null },
                         onClick = { onPersonTap(name, phone) }
                     )
@@ -109,6 +135,36 @@ fun LendBorrowScreen(
             }
         }
     }
+
+    if (showAddSheet) {
+        AddLendSheet(viewModel = viewModel, onDismiss = { showAddSheet = false })
+    }
+}
+
+@Composable
+private fun SummaryPill(label: String, amount: String, color: Color, modifier: Modifier) {
+    Box(
+        modifier
+            .clip(RoundedCornerShape(14.dp))
+            .background(color.copy(alpha = 0.1f))
+            .border(BorderStroke(1.dp, color.copy(alpha = 0.2f)), RoundedCornerShape(14.dp))
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(label, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = color.copy(0.7f), letterSpacing = 1.sp)
+            Text(amount, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = color)
+        }
+    }
+}
+
+@Composable
+private fun SectionLabel(text: String) {
+    Text(
+        text,
+        fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = TextSecondary,
+        letterSpacing = 0.8.sp,
+        modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
+    )
 }
 
 @Composable
@@ -120,50 +176,163 @@ private fun PersonCard(
     val color = avatarColor(name)
     val net = totalLent - totalBorrowed
 
-    Card(
-        onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = BgCard),
-        shape = RoundedCornerShape(18.dp),
-        modifier = Modifier.fillMaxWidth()
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(horizontal = 20.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            // Avatar
-            Box(
-                Modifier.size(48.dp).clip(CircleShape).background(color.copy(alpha = 0.18f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(name.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
-                    fontWeight = FontWeight.ExtraBold, fontSize = 20.sp, color = color)
-            }
-            Spacer(Modifier.width(14.dp))
-            Column(Modifier.weight(1f)) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(name, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = TextPrimary, maxLines = 1)
-                    if (hasSplit) {
-                        Surface(
-                            color = AccentBlue.copy(alpha = 0.15f),
-                            shape = RoundedCornerShape(6.dp)
-                        ) {
-                            Text("Split", color = AccentBlue, fontSize = 9.sp, fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp))
-                        }
+        // Avatar
+        Box(
+            Modifier.size(48.dp).clip(CircleShape).background(color.copy(alpha = 0.18f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                name.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
+                fontSize = 20.sp, fontWeight = FontWeight.Bold, color = color
+            )
+        }
+
+        Column(Modifier.weight(1f)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(name, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary, maxLines = 1)
+                if (hasSplit) {
+                    Box(
+                        Modifier
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(AccentBlue.copy(0.15f))
+                            .padding(horizontal = 5.dp, vertical = 2.dp)
+                    ) {
+                        Text("Split", fontSize = 9.sp, fontWeight = FontWeight.Bold, color = AccentBlue)
                     }
                 }
-                if (!phone.isNullOrEmpty()) {
-                    Text(phone, style = MaterialTheme.typography.bodySmall, color = TextSecondary)
-                }
-                Text(
-                    when {
-                        net > 0 -> "owes you ${formatAmount(net)}"
-                        net < 0 -> "you owe ${formatAmount(kotlin.math.abs(net))}"
-                        else    -> "settled ✓"
-                    },
-                    fontSize = 12.sp,
-                    color = if (net > 0) IncomeGreen else if (net < 0) ExpenseRed else TextSecondary,
-                    fontWeight = FontWeight.Medium
-                )
             }
-            Icon(Icons.Default.ChevronRight, null, tint = TextTertiary)
+            Text(
+                when {
+                    net > 0  -> "owes you ${formatAmount(net)}"
+                    net < 0  -> "you owe ${formatAmount(-net)}"
+                    else     -> "all settled ✓"
+                },
+                fontSize = 12.sp,
+                color = when {
+                    net > 0  -> IncomeGreen
+                    net < 0  -> ExpenseRed
+                    else     -> TextSecondary
+                },
+                fontWeight = FontWeight.Medium
+            )
+            if (!phone.isNullOrEmpty()) {
+                Text(phone, fontSize = 12.sp, color = TextSecondary)
+            }
+        }
+
+        Icon(Icons.Default.ChevronRight, null, tint = TextTertiary.copy(0.4f))
+    }
+
+    HorizontalDivider(
+        Modifier.padding(start = 82.dp, end = 20.dp),
+        color = Color.White.copy(alpha = 0.04f),
+        thickness = 0.5.dp
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AddLendSheet(viewModel: MainViewModel, onDismiss: () -> Unit) {
+    var name       by remember { mutableStateOf("") }
+    var amountStr  by remember { mutableStateOf("") }
+    var note       by remember { mutableStateOf("") }
+    var type       by remember { mutableStateOf(LendBorrowType.LENT) }
+
+    ModalBottomSheet(onDismissRequest = onDismiss, containerColor = BgCard) {
+        Column(
+            Modifier.padding(horizontal = 24.dp).padding(bottom = 48.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Text("Add Record", fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, color = TextPrimary)
+
+            // Lent / Borrowed toggle
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(BgCardAlt),
+                horizontalArrangement = Arrangement.spacedBy(0.dp)
+            ) {
+                listOf(LendBorrowType.LENT to "I Lent", LendBorrowType.BORROWED to "I Borrowed").forEach { (t, label) ->
+                    Box(
+                        Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(if (type == t) if (t == LendBorrowType.LENT) IncomeGreen else ExpenseRed else Color.Transparent)
+                            .clickable { type = t }
+                            .padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            label,
+                            fontWeight = FontWeight.Bold,
+                            color = if (type == t) Color.White else TextSecondary
+                        )
+                    }
+                }
+            }
+
+            OutlinedTextField(
+                value = name, onValueChange = { name = it },
+                label = { Text("Person name", color = TextSecondary) },
+                modifier = Modifier.fillMaxWidth(),
+                colors = mmLendTextFieldColors(),
+                shape = RoundedCornerShape(12.dp),
+                singleLine = true
+            )
+
+            OutlinedTextField(
+                value = amountStr, onValueChange = { amountStr = it },
+                label = { Text("Amount", color = TextSecondary) },
+                prefix = { Text("₹", color = Accent1, fontWeight = FontWeight.Bold) },
+                modifier = Modifier.fillMaxWidth(),
+                colors = mmLendTextFieldColors(),
+                shape = RoundedCornerShape(12.dp),
+                singleLine = true
+            )
+
+            OutlinedTextField(
+                value = note, onValueChange = { note = it },
+                label = { Text("Note (optional)", color = TextSecondary) },
+                modifier = Modifier.fillMaxWidth(),
+                colors = mmLendTextFieldColors(),
+                shape = RoundedCornerShape(12.dp),
+                singleLine = true
+            )
+
+            Button(
+                onClick = {
+                    val amt = amountStr.toDoubleOrNull() ?: return@Button
+                    if (name.isBlank()) return@Button
+                    viewModel.addLendBorrow(LendBorrow(
+                        type = type, personName = name.trim(),
+                        amount = amt, note = note.trim(), date = java.util.Date()
+                    ))
+                    onDismiss()
+                },
+                enabled = name.isNotBlank() && (amountStr.toDoubleOrNull() ?: 0.0) > 0,
+                modifier = Modifier.fillMaxWidth().height(52.dp),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Accent1)
+            ) {
+                Text("Save", fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+            }
         }
     }
 }
+
+@Composable
+private fun mmLendTextFieldColors() = OutlinedTextFieldDefaults.colors(
+    focusedBorderColor = Accent1, unfocusedBorderColor = BgCardAlt,
+    focusedTextColor = TextPrimary, unfocusedTextColor = TextPrimary,
+    cursorColor = Accent1, focusedContainerColor = BgCardAlt,
+    unfocusedContainerColor = BgCardAlt, focusedLabelColor = Accent1
+)
