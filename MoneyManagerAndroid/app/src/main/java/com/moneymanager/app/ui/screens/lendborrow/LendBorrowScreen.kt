@@ -18,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.moneymanager.app.data.models.*
+import com.moneymanager.app.ui.screens.payment.SplitFriendEntry
+import com.moneymanager.app.ui.screens.payment.SplitSheet
 import com.moneymanager.app.ui.theme.*
 import com.moneymanager.app.ui.viewmodel.MainViewModel
 
@@ -30,7 +32,8 @@ fun LendBorrowScreen(
 ) {
     val lendBorrows by viewModel.lendBorrows.collectAsState()
     val contacts    by viewModel.savedContacts.collectAsState()
-    var showAddSheet by remember { mutableStateOf(false) }
+    var showAddSheet      by remember { mutableStateOf(false) }
+    var showSplitExpense  by remember { mutableStateOf(false) }
 
     val grandTotalLent     = lendBorrows.filter { it.type == LendBorrowType.LENT     && !it.isPaid }.sumOf { it.remainingAmount }
     val grandTotalBorrowed = lendBorrows.filter { it.type == LendBorrowType.BORROWED && !it.isPaid }.sumOf { it.remainingAmount }
@@ -62,12 +65,17 @@ fun LendBorrowScreen(
             Text("Payments", fontSize = 30.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                // Add lend/borrow record
+                // Split expense — purple circle (matches iOS)
                 Box(
-                    Modifier
-                        .size(36.dp)
-                        .clip(CircleShape)
-                        .background(Accent1)
+                    Modifier.size(36.dp).clip(CircleShape).background(Color(0xFF7B61FF))
+                        .clickable { showSplitExpense = true },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(Icons.Default.CallSplit, null, tint = Color.White, modifier = Modifier.size(18.dp))
+                }
+                // Add lend/borrow — red circle
+                Box(
+                    Modifier.size(36.dp).clip(CircleShape).background(Accent1)
                         .clickable { showAddSheet = true },
                     contentAlignment = Alignment.Center
                 ) {
@@ -138,6 +146,30 @@ fun LendBorrowScreen(
 
     if (showAddSheet) {
         AddLendSheet(viewModel = viewModel, onDismiss = { showAddSheet = false })
+    }
+
+    if (showSplitExpense) {
+        SplitSheet(
+            viewModel   = viewModel,
+            totalAmount = 0.0,
+            onConfirm   = { friends: List<SplitFriendEntry> ->
+                if (friends.isNotEmpty()) {
+                    val total = friends.sumOf { f: SplitFriendEntry -> f.share } * (friends.size + 1)
+                    viewModel.splitBill(
+                        totalAmount = total,
+                        myShare     = total / (friends.size + 1),
+                        note        = "Split expense",
+                        groupName   = "Group split",
+                        originalRecipient = "",
+                        friends     = friends.map { f: SplitFriendEntry ->
+                            com.moneymanager.app.data.repository.SplitFriend(name = f.name, phone = f.phone ?: "", share = f.share)
+                        }
+                    )
+                }
+                showSplitExpense = false
+            },
+            onDismiss   = { showSplitExpense = false }
+        )
     }
 }
 

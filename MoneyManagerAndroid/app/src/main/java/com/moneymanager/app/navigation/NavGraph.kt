@@ -29,6 +29,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import com.moneymanager.app.ui.screens.analytics.AnalyticsScreen
 import com.moneymanager.app.ui.screens.auth.AuthScreen
 import com.moneymanager.app.ui.screens.dashboard.DashboardScreen
 import com.moneymanager.app.ui.screens.history.HistoryScreen
@@ -108,17 +109,9 @@ fun NavGraph(
                 )
             }
 
-            // ── Analytics (stub — same as iOS placeholder) ───────────────
+            // ── Analytics ────────────────────────────────────────────────
             composable(Routes.ANALYTICS) {
-                // Analytics screen placeholder
-                Box(Modifier.fillMaxSize().background(BgPrimary), contentAlignment = Alignment.Center) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(Icons.Default.BarChart, null, tint = TextSecondary, modifier = Modifier.size(56.dp))
-                        Spacer(Modifier.height(16.dp))
-                        Text("Analytics", fontSize = 24.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, color = TextPrimary)
-                        Text("Coming soon", fontSize = 14.sp, color = TextSecondary)
-                    }
-                }
+                AnalyticsScreen(viewModel = viewModel)
             }
 
             // ── Lend / Borrow ────────────────────────────────────────────
